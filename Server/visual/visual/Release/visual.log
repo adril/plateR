@@ -1,0 +1,20 @@
+﻿  client.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0501 to the compiler command line; or
+  - add _WIN32_WINNT=0x0501 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0501 (i.e. Windows XP target).
+..\..\client.cpp(34): warning C4996: 'boost::asio::basic_socket<Protocol,SocketService>::cancel': By default, this function always fails with operation_not_supported when used on Windows XP, Windows Server 2003, or earlier. Consult documentation for details.
+          with
+          [
+              Protocol=boost::asio::ip::tcp,
+              SocketService=boost::asio::stream_socket_service<boost::asio::ip::tcp>
+          ]
+          C:\Users\krik\Desktop\Boost\boost/asio/basic_socket.hpp(453) : see declaration of 'boost::asio::basic_socket<Protocol,SocketService>::cancel'
+          with
+          [
+              Protocol=boost::asio::ip::tcp,
+              SocketService=boost::asio::stream_socket_service<boost::asio::ip::tcp>
+          ]
+  Generating code
+  Finished generating code
+  visual.vcxproj -> C:\Users\krik\Desktop\Dropbox\work\babel-2014-bertuc_k\src\Server\visual\Release\visual.exe
