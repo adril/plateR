@@ -24,6 +24,7 @@ class CLASSINDLL_CLASS_DECL LProtocol : public IProtocol {
     LProtocol(LProtocol const&);
     virtual ~LProtocol();
     virtual void receiveMessage(Message &message);
+	IProtocolDelegate *_delegate;
   protected:
     /* main hash table */
     virtual void loginHandler(Message &message);
@@ -37,7 +38,6 @@ class CLASSINDLL_CLASS_DECL LProtocol : public IProtocol {
     void debug();
   protected:
     std::map<char, protocolHandler> _protocolHandlerMap;
-    IProtocolDelegate *_delegate;
   };
 
 #endif /* !__LPROTOCOL_HH__ */

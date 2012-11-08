@@ -3,8 +3,8 @@
 Client::Client(tcp::io_service& io_service) : _socket(io_service)
 {
 	_timestamp = 0.0;
-	_protocol = new LProtocol(this);
-
+	_protocol = new LProtocol;
+	_protocol->_delegate = this;
 	memset(_userInfo.login, 0, sizeof(Login));
 	memcpy(_userInfo.login, "nameless", sizeof("nameless"));
 }
@@ -45,6 +45,8 @@ void Client::handle_input(const boost::system::error_code& error, size_t bytes_t
 {
 	/* DATA TREATMENT */
 	_input_buffer.offset += bytes_transferred;
+	std::cout << _input_buffer.buffer << std::endl;
+	read(error);
 }
 
 /* SEND / RECEIVE MESSAGE */
@@ -76,7 +78,7 @@ void Client::plateHandler(Message &message)
 void Client::fileHandler(Message &message)
 {
 }
-void ClientunknowMessageHandler(Message &message)
+void Client::unknowMessageHandler(Message &message)
 {
 }
 
