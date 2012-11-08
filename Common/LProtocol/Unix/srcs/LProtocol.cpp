@@ -54,15 +54,15 @@ void LProtocol::loginResultHandler(Message &message) {
 }
 
 void LProtocol::logOutHandler(Message &message) {
-  this->_delegate->loginHandler(message);
+  this->_delegate->logOutHandler(message);
 }
 
 void LProtocol::plateHandler(Message &message) {
-  this->_delegate->loginHandler(message);
+  this->_delegate->plateHandler(message);
 }
 
 void LProtocol::fileHandler(Message &message) {
-  this->_delegate->loginHandler(message);
+  this->_delegate->fileHandler(message);
 }
 
 void LProtocol::unknowMessageHandler(Message &message) {
