@@ -30,7 +30,7 @@ namespace VSP {
     OK
   };
 
-  enum ERROR {
+  enum PERROR {
     ERROR_NOTHING,
     ERROR_FILE
   };
