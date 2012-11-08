@@ -1,5 +1,17 @@
-﻿Build started 11/8/2012 8:21:15 PM.
+﻿Build started 08-Nov-12 1:58:15 PM.
+     1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\Server.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         Client.vcxproj -> Z:\Desktop\dev\trainning-china\plateR\Server\Debug\Server.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\Server.unsuccessfulbuild".
+         Touching "Debug\Server.lastbuildstate".
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.07
+Time Elapsed 00:00:01.57
