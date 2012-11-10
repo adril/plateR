@@ -34,7 +34,7 @@ struct buffer_t
 {
     uint8_t buffer[BUF_SIZE];
     unsigned int offset;
-    buffer_t() {offset = 0;memset(buffer, 0, BUF_SIZE);}
+    buffer_t() {offset = 0; memset(buffer, 0, BUF_SIZE);}
 };
 
 #pragma pack(push)

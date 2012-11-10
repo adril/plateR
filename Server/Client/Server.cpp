@@ -62,7 +62,7 @@ void Server::startAccept()
 		boost::asio::placeholders::error));
 }
 
-void		Server::handleAccept(Client *cl, tcp::error_code error)
+void Server::handleAccept(Client *cl, tcp::error_code error)
 {
   if (!error)
     {
