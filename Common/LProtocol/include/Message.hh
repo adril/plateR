@@ -8,8 +8,6 @@
 
 #include "IMessage.hh"
 #include "VSP.h"
-//#include <User.hh>
-//#include "../../../User/User.hh"
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
@@ -28,7 +26,7 @@ public:
   void initDataTypeSizeMap();
   virtual char *getHeader() const;
   virtual char *getBody() const;
-  virtual char *getData() const;
+  virtual char *getData()const;
   size_t getHeaderLength() const;
   size_t getBodyLength() const;
   size_t getDataLength() const;
@@ -41,7 +39,7 @@ public:
   virtual void decodeHeader(void);
   virtual void encodeBody(void);
   virtual void decodeBody(void);
-  virtual void encodeBodyWithError(char error);
+  void clean();;
   void copyString(char *src, char *dest, size_t size);
   virtual void debug();
 protected:
@@ -50,11 +48,8 @@ protected:
   char *_data;
   size_t _bodyLength;
   char _type;
-  char *_login_;
-  char _error;// =  RVSP::ERROR_NOTHING
-  std::map<char, size_t> _dataTypeSizeMap;//assoSize_;
-public:
-  //  std::deque<User> sendList_;
+  char _error;
+  std::map<char, size_t> _dataTypeSizeMap;
 };
 
 #endif /* !__MESSAGE_HH__ */

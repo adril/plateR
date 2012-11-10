@@ -5,10 +5,11 @@ MessageLogOut::MessageLogOut(Message &other, char type)
   this->_logOut.type = type;
 }
 
-MessageLogOut::MessageLogOut(Message &other) {
+MessageLogOut::MessageLogOut(Message &other)
+	: Message(other) {
   std::cout  << "[MessageLogOut] ------ (Message const& other)" << std::endl;
-
-  /* copy of data */
+  /*
+  // copy of data
   this->_header = new char[other.getHeaderLength()];
   this->copyString(other.getHeader(), this->getHeader(), other.getHeaderLength());
   //  std::memset(this->header_, '\0', other.getHeaderLength());
@@ -19,9 +20,10 @@ MessageLogOut::MessageLogOut(Message &other) {
   //  std::memset(this->_body, '\0', other.getBodyLength());
   //  std::memcpy(this->_body, other.getBody(), other.getBodyLength());
 
-  /* copy of header infos */
+  /// copy of header infos
   this->_type = other.getType();
   this->_bodyLength = other.getBodyLength();
+  */
 }
 
 MessageLogOut::~MessageLogOut() {}
@@ -31,11 +33,11 @@ void MessageLogOut::encodeBody() {
   std::memcpy(this->_body, &this->_logOut, sizeof(this->_logOut));
 }
 
-void MessageLogOut::encodeBodyWithError(char error) {
-  this->_error = error;
-  encodeBody();
-}
-
 void MessageLogOut::decodeBody() {
   this->_logOut.type = reinterpret_cast<VSP::LogOut *>(this->_body)->type;
+}
+
+void MessageLogOut::debug() {
+	std::cout << "MessageLogOut::debug()" << std::endl;
+	std::cout << "type: " << (int)this->_logOut.type << std::endl;
 }

@@ -9,14 +9,14 @@ class CLASSINDLL_CLASS_DECL MessageLoginResult : public Message {
 class MessageLoginResult : public Message {
 #endif
 public:
-  MessageLoginResult(Message &, char type, char state);
-  MessageLoginResult(Message &);
-  virtual ~MessageLoginResult();
-  virtual void encodeBody();
-  virtual void encodeBodyWithError(char);
-  virtual void decodeBody();
+	MessageLoginResult(Message &, char type, char state);
+	MessageLoginResult(Message &);
+	virtual ~MessageLoginResult();
+	virtual void encodeBody();
+	virtual void decodeBody();
+	virtual void debug();;
 private:
-  VSP::LoginResult _loginResult;
+	VSP::LoginResult _loginResult;
 };
 
 #endif /* !__MESSAGELOGINRESULT_HH__ */

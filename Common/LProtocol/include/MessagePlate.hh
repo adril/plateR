@@ -1,4 +1,4 @@
-#ifndef __MESSAGEPLATE_HH___HH__
+#ifndef __MESSAGEPLATE_HH__
 #define __MESSAGEPLATE_HH__
 
 #include "Message.hh"
@@ -9,14 +9,14 @@ class CLASSINDLL_CLASS_DECL MessagePlate : public Message {
 class MessagePlate : public Message {
 #endif
 public:
-  MessagePlate(Message &other, char type, char *codePlate, char *name, char *codeImage, char state);
-  MessagePlate(Message &);
-  virtual ~MessagePlate();
-  virtual void encodeBody();
-  virtual void encodeBodyWithError(char);
-  virtual void decodeBody();
+	MessagePlate(Message &other, char type, char *codePlate, char *name, char *codeImage, char state);
+	MessagePlate(Message &);
+	virtual ~MessagePlate();
+	virtual void encodeBody();
+	virtual void decodeBody();
+	virtual void debug();
 private:
-  VSP::Plate _plate;
+	VSP::Plate _plate;
 };
 
 #endif /* !__MESSAGEPLATE_HH__ */

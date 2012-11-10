@@ -9,14 +9,14 @@ class CLASSINDLL_CLASS_DECL MessageLogOut : public Message {
 class MessageLogOut : public Message {
 #endif
 public:
-  MessageLogOut(Message &other, char type);
-  MessageLogOut(Message &);
-  virtual ~MessageLogOut();
-  virtual void encodeBody();
-  virtual void encodeBodyWithError(char );
-  virtual void decodeBody();
+	MessageLogOut(Message &other, char type);
+	MessageLogOut(Message &);
+	virtual ~MessageLogOut();
+	virtual void encodeBody();
+	virtual void decodeBody();
+	virtual void debug();;
 private:
-  VSP::LogOut _logOut;
+	VSP::LogOut _logOut;
 };
 
 #endif /* !__MESSAGELOGOUT_HH__ */

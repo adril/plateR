@@ -1,17 +1,12 @@
-﻿Build started 08-Nov-12 1:58:15 PM.
+﻿Build started 09-Nov-12 6:24:50 AM.
      1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Build target(s)).
      1>InitializeBuildStatus:
-         Creating "Debug\Server.unsuccessfulbuild" because "AlwaysCreate" was specified.
+         Touching "Debug\Server.unsuccessfulbuild".
        ClCompile:
-         All outputs are up-to-date.
-       Link:
-         All outputs are up-to-date.
-         Client.vcxproj -> Z:\Desktop\dev\trainning-china\plateR\Server\Debug\Server.exe
-       FinalizeBuildStatus:
-         Deleting file "Debug\Server.unsuccessfulbuild".
-         Touching "Debug\Server.lastbuildstate".
-     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Build target(s)).
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"Z:\Desktop\dev\trainning-china\plateR\Server\Client\..\..\..\CommonFile\LProtocol\include" /I"Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt -D_WIN32_WINNT=0x0501 Client.cpp main.cpp Server.cpp
+         Server.cpp
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.57
+Time Elapsed 00:00:47.17

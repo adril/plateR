@@ -3,12 +3,17 @@
 
 #include <iostream>
 #include <map>
-#include <deque>
 
-#include "../include/IProtocol.hh"
-#include "../include/Message.hh"
+#include "IProtocol.hh"
+#include "Message.hh"
 
-#include "../include/IProtocolDelegate.hh"
+#include "MessageLogin.hh"
+#include "MessageLoginResult.hh"
+#include "MessageLogOut.hh"
+#include "MessagePlate.hh"
+#include "MessageFile.hh"
+
+#include "IProtocolDelegate.hh"
 
 #define IS_IN_RANGE(X, Y, Z) (X >= Y ? (X <= Z ? true : false) : false)
 

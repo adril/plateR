@@ -1,9 +1,8 @@
 #ifndef _CLIENT_HPP_
 #define _CLIENT_HPP_
 
-#include "LProtocol.hh"
+#include <LProtocol.hh>
 #include "Common.hpp"
-
 
 class Client : public IProtocolDelegate
 {
@@ -15,6 +14,7 @@ public:
 	void start();
 	tcp::socket& getSocket();
     std::string	getIpAsString() const;
+	void debug();
 
 	/* CALLBACK FOR LPROTOCOL */
 	virtual void loginHandler(Message &message);
@@ -26,6 +26,7 @@ public:
 private :
 	tcp::socket		_socket;
 	LProtocol	*_protocol;
+	Message		*_inputMessage;
 	buffer_t	_input_buffer;
 	buffer_t	_output_buffer;  
 	userInfo	_userInfo;

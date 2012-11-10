@@ -5,6 +5,10 @@ Client::Client(tcp::io_service& io_service) : _socket(io_service)
 	_timestamp = 0.0;
 	_protocol = new LProtocol;
 	_protocol->_delegate = this;
+	_inputMessage = new Message;
+
+	debug();
+
 	memset(_userInfo.login, 0, sizeof(Login));
 	memcpy(_userInfo.login, "nameless", sizeof("nameless"));
 }
@@ -14,6 +18,46 @@ Client::~Client()
 
     _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, err);
     _socket.close(err);
+}
+
+void Client::debug() {
+	  std::cout	<< "[LProtocol] debug" << std::endl;
+  {
+    Message *message = new Message;
+    message->encodeHeader(VSP::LOGIN_RESULT);
+    message->decodeHeader();
+    message->getHeader();
+	message->debug();
+
+	MessageLoginResult *customMessage = new MessageLoginResult(*message, VSP::LOGIN_RESULT, VSP::KO);
+	customMessage->encodeBody();
+
+	customMessage->encodeData();
+
+	customMessage->debug();
+
+
+	std::cout << "header: " << message->getHeader() << std::endl;
+	//MessageLogingResult 
+
+    //read on message.getBody(); size of message.getBodyLength();
+	/*
+	{
+      MessageConnection *messageConnection = new MessageConnection(*message, RVSP::CONNECT, RVSP::ERROR_NOTHING);
+      messageConnection->encodeBody();
+      RVSP::Connection *tmpConnection = reinterpret_cast<RVSP::Connection *>(messageConnection->getBody());
+      std::cout << "[Messageconnection]" << messageConnection->getLogin() << " bodyLength_: " << messageConnection->getBodyLength() << std::endl;
+      std::cout << "[Messageconnection] getBody() | command: " << (int)tmpConnection->command << std::endl;
+
+      messageConnection->encodeData();
+      messageConnection->sendList_.push_back(User("login", 0, 5));
+      char const *msgTmp = messageConnection->getData() + messageConnection->getHeaderLength();
+      RVSP::Connection *dataTmp = (RVSP::Connection*)(msgTmp);
+      std::cout << "[Message] getData()"<< (int)dataTmp->command << std::endl;
+      this->messageList_.push_back(messageConnection);
+    }
+	*/
+  }
 }
 
 // Internal IO functions

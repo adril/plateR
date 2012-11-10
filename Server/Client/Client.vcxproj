@@ -40,20 +40,24 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;$(IncludePath)</IncludePath>
-    <LibraryPath>Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Desktop\LProtocol\Windows\Release;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;$(IncludePath)</IncludePath>
+    <LibraryPath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Debug;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Desktop\LProtocol\Windows\Release;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>-D_WIN32_WINNT=0x0501 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\boost;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\LProtocol\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\JD\Desktop\LProtocol\Windows\Release;C:\Users\JD\Desktop\LProtocol\Windows\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\CommonFiles\libs\LProtocol\Windows\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>LProtocol.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -63,11 +67,15 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -79,6 +87,11 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj">
+      <Project>{605f7460-0a6a-49d4-910c-154de56b5c19}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

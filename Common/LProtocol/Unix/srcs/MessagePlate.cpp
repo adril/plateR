@@ -14,10 +14,11 @@ MessagePlate::MessagePlate(Message &other, char type, char *codePlate, char *nam
   this->_plate.state = state;
 }
 
-MessagePlate::MessagePlate(Message &other) {
+MessagePlate::MessagePlate(Message &other)
+	: Message(other) {
   std::cout  << "[MessagePlate] ------ (Message const& other)" << std::endl;
-
-  /* copy of data */
+  /*
+  // copy of data
   this->_header = new char[other.getHeaderLength()];
   this->copyString(other.getHeader(), this->getHeader(), other.getHeaderLength());
   //  std::memset(this->header_, '\0', other.getHeaderLength());
@@ -28,20 +29,16 @@ MessagePlate::MessagePlate(Message &other) {
   //  std::memset(this->_body, '\0', other.getBodyLength());
   //  std::memcpy(this->_body, other.getBody(), other.getBodyLength());
 
-  /* copy of header infos */
+  // copy of header infos
   this->_type = other.getType();
   this->_bodyLength = other.getBodyLength();
+  */
 }
 
 MessagePlate::~MessagePlate() {}
 
 void MessagePlate::encodeBody() {
   std::memcpy(this->_body, &this->_plate, sizeof(this->_plate));
-}
-
-void MessagePlate::encodeBodyWithError(char error) {
-  this->_error = error;
-  encodeBody();
 }
 
 void MessagePlate::decodeBody() {
@@ -52,8 +49,17 @@ void MessagePlate::decodeBody() {
 
   std::strcpy(this->_plate.code_plate, reinterpret_cast<VSP::Plate *>(this->_body)->code_plate);
 
+    this->copyString( reinterpret_cast<VSP::Plate *>(this->_body)->code_plate, this->_plate.code_plate, VSP::CODE_PLATE_SIZE);
+	this->copyString( reinterpret_cast<VSP::Plate *>(this->_body)->name, this->_plate.name, VSP::NAME_SIZE);
+	this->copyString( reinterpret_cast<VSP::Plate *>(this->_body)->code_image, this->_plate.code_image, VSP::CODE_IMAGE_SIZE);
   //  this->_plate.code_plate = reinterpret_cast<VSP::Plate *>(this->_body)->code_plate;
 //  this->_plate.name = reinterpret_cast<VSP::Plate *>(this->_body)->name;
   // this->_plate.code_image = reinterpret_cast<VSP::Plate *>(this->_body)->code_image;
   this->_plate.state = reinterpret_cast<VSP::Plate *>(this->_body)->state;
+}
+
+void MessagePlate::debug() {
+	std::cout << "MessageLogOut::debug()" << std::endl;
+	std::cout << "code_plate: " << this->_plate.code_plate << " name: " << this->_plate.name << " code_image: "<< this->_plate.code_image
+			  << " state: " << (int)this->_plate.state << std::endl;
 }

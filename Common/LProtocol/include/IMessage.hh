@@ -5,7 +5,7 @@
 /**
  * \file IMessage.hh
  * \brief IMessage is the interface wich define a basic Message
- * \date 25 december 2011
+ * \date 8 november 2012
  */
 
 
@@ -53,7 +53,6 @@ public:
   virtual char getError() const = 0;
   /**
    * \param type type of body data
-   * \param login of the sender
    * \brief serialized header into a header data
    */
   virtual void encodeHeader(char type) = 0;
@@ -61,10 +60,6 @@ public:
    * \brief serialized body into a body data
    */
   virtual void encodeBody() = 0;
-  /**
-   * \brief serialized body with specific error
-   */
-  virtual void encodeBodyWithError(char) = 0;
   /**
    * \brief unserialized body
    */
