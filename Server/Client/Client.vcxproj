@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="IServerDelegate.hpp" />
     <ClInclude Include="Server.hpp" />
   </ItemGroup>
   <ItemGroup>

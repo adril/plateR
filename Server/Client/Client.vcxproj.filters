@@ -24,6 +24,9 @@
     <ClInclude Include="Server.hpp">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="IServerDelegate.hpp">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">

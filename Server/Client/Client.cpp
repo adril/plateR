@@ -8,35 +8,14 @@ Client::Client(tcp::io_service& io_service) : _socket(io_service) {
 
 	//debug();
 
-	memset(_userInfo.login, 0, sizeof(Login));
-	memcpy(_userInfo.login, "nameless", sizeof("nameless"));
+	//memset(_userInfo.login, 0, sizeof(Login));
+	//memcpy(_userInfo.login, "nameless", sizeof("nameless"));
 }
 Client::~Client() {
 	boost::system::error_code err;
 
 	_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, err);
 	_socket.close(err);
-}
-
-void Client::debug() {
-	std::cout	<< "[LProtocol] debug" << std::endl;
-	{
-		Message *message = new Message;
-		message->encodeHeader(VSP::LOGIN_RESULT);
-		message->decodeHeader();
-		message->getHeader();
-		message->debug();
-
-		MessageLoginResult *customMessage = new MessageLoginResult(*message, VSP::LOGIN_RESULT, VSP::KO);
-		customMessage->encodeBody();
-
-		customMessage->encodeData();
-
-		customMessage->debug();
-
-
-		std::cout << "header: " << message->getHeader() << std::endl;
-	}
 }
 
 // Internal IO functions
@@ -75,6 +54,8 @@ void Client::readBody(const boost::system::error_code& error) {
 
 void Client::readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred) {
 	//TODO: do job on the message
+	if (checkError(error))
+		return;
 
 	this->_inputMessage->decodeHeader();
 	this->_inputMessage->debug();
@@ -84,6 +65,8 @@ void Client::readHeaderHandler(const boost::system::error_code& error, size_t by
 }
 
 void Client::readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred) {
+	if (checkError(error))
+		return;
 	//this->_inputMessage->decodeBody();
 	this->_protocol->receiveMessage(*this->_inputMessage);
 	//this->_inputMessage->clean();
@@ -91,6 +74,9 @@ void Client::readBodyHandler(const boost::system::error_code& error, size_t byte
 }
 
 void Client::writeFinish(const boost::system::error_code &error, uint8_t *data) {
+	//TODO: clean message
+	if (checkError(error))
+		return;
 
 }
 //INFO: out of business
@@ -179,13 +165,55 @@ Message *Client::headerMessage(char bodyType) {
 	return message;
 }
 
+/* ERROR */
+
+bool Client::checkError(const boost::system::error_code& error) {
+	if (error) {
+		if (this->_delegate) {
+			//TODO: check the error value
+			delete this;
+			return true;
+			this->_delegate->disconectClient(this);
+		}
+	}
+	return false;
+}
+
 /* GETTER */
 
-tcp::socket& Client::getSocket()
-{
+tcp::socket& Client::getSocket() {
 	return _socket;
 }
-std::string	Client::getIpAsString() const
-{
+
+std::string	Client::getIpAsString() const {
 	return _socket.remote_endpoint().address().to_string();
+}
+
+/* SETTER */
+
+void Client::setDelegate(IServerDelegate *delegate) {
+	this->_delegate = delegate;
+}
+
+/* DEBUG */
+
+void Client::debug() {
+	std::cout	<< "[LProtocol] debug" << std::endl;
+	{
+		Message *message = new Message;
+		message->encodeHeader(VSP::LOGIN_RESULT);
+		message->decodeHeader();
+		message->getHeader();
+		message->debug();
+
+		MessageLoginResult *customMessage = new MessageLoginResult(*message, VSP::LOGIN_RESULT, VSP::KO);
+		customMessage->encodeBody();
+
+		customMessage->encodeData();
+
+		customMessage->debug();
+
+
+		std::cout << "header: " << message->getHeader() << std::endl;
+	}
 }

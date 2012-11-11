@@ -104,30 +104,6 @@ void LProtocol::unknowMessageHandler(Message &message) {
 
 void LProtocol::debug() {
 	std::cout << "LProtocol::debug()" << std::endl;
-	/*
-	std::cut << "[LProtocol] aff hello" << std::endl;
-	{
-	Message &message = new Message();
-	message.encodeHeader(RVSP::CMD_CONNECTION, "adril");
-	message.decodeHeader();
-	message.getHeader();
-	//read on message.getBody(); size of message.getBodyLength();
-	{
-	MessageConnection *messageConnection = new MessageConnection(*message, RVSP::CONNECT, RVSP::ERROR_NOTHING);
-	messageConnection->encodeBody();
-	RVSP::Connection *tmpConnection = reinterpret_cast<RVSP::Connection *>(messageConnection->getBody());
-	std::cout << "[Messageconnection]" << messageConnection->getLogin() << " bodyLength_: " << messageConnection->getBodyLength() << std::endl;
-	std::cout << "[Messageconnection] getBody() | command: " << (int)tmpConnection->command << std::endl;
-
-	messageConnection->encodeData();
-	messageConnection->sendList_.push_back(User("login", 0, 5));
-	char const *msgTmp = messageConnection->getData() + messageConnection->getHeaderLength();
-	RVSP::Connection *dataTmp = (RVSP::Connection*)(msgTmp);
-	std::cout << "[Message] getData()"<< (int)dataTmp->command << std::endl;
-	this->messageList_.push_back(messageConnection);
-	}
-	}
-	*/
 }
 
 #ifdef _WIN32

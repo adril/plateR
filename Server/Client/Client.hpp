@@ -3,6 +3,7 @@
 
 #include "LProtocol.hh"
 #include "Common.hpp"
+#include "IServerDelegate.hpp"
 
 class Client : public IProtocolDelegate
 {
@@ -15,6 +16,10 @@ public:
 	tcp::socket& getSocket();
 	std::string	getIpAsString() const;
 	void debug();
+
+	//INFO: setter
+	void setDelegate(IServerDelegate *delegate);
+
 
 	/* CALLBACK FOR LPROTOCOL */
 	virtual void loginHandler(Message &message);
@@ -31,6 +36,7 @@ private :
 	buffer_t	_output_buffer;  
 	userInfo	_userInfo;
 	double		_timestamp;
+	IServerDelegate *_delegate;
 
 	void handle_input();
 
@@ -42,13 +48,14 @@ private :
 	void readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred);
 	void readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred);
 
+	bool checkError(const boost::system::error_code& error);
+
 	// Internal IO functions
 	void read(const boost::system::error_code& error);
 	void writeFinish(const boost::system::error_code &error, uint8_t *data);
 	//INFO: out of business
 	void handle_output(uint8_t*, int);
 	void handle_input(const boost::system::error_code& error, size_t bytes_transferred);
-
 
 	void sendMessage(Message &msg);
 	//INFO: Message

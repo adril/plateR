@@ -56,14 +56,14 @@ void Server::startAccept()
 {
 	Client	*new_client = new Client(_io_service);
 
+	new_client->setDelegate(this);
 	std::cout << "Server::start_accept" << std::endl;
 	_acceptor.async_accept(new_client->getSocket(),
 		boost::bind(&Server::handleAccept, this, new_client,
 		boost::asio::placeholders::error));
 }
 
-void Server::handleAccept(Client *cl, tcp::error_code error)
-{
+void Server::handleAccept(Client *cl, tcp::error_code error) {
   if (!error)
     {
       cl->start();
@@ -73,7 +73,15 @@ void Server::handleAccept(Client *cl, tcp::error_code error)
   else
     {
       std::cout << "ACCEPT FAIL" << std::endl;
-       _to_be_deleted.push_back(cl);
+	  disconectClient(cl);
+      // _to_be_deleted.push_back(cl);
     }
   startAccept();
+}
+
+void Server::disconectClient(void *client) {
+      std::cout << "Disconect client" << std::endl;
+       //_to_be_deleted.push_back(reinterpret_cast<Client *>(client));
+	   //delete reinterpret_cast<Client *>(client);
+	  deleteClients();
 }

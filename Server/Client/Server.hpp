@@ -9,9 +9,9 @@
 #include <fstream>
 #include "Common.hpp"
 #include "Client.hpp"
+#include "IServerDelegate.hpp"
 
-
-class Server
+class Server : public IServerDelegate
 {
 public :
 	Server();
@@ -19,6 +19,7 @@ public :
 
 	void	run();
 	void	stop();
+	virtual void disconectClient(void *client);
 private :
 	std::list<Client*>	_clients;
 	std::list<Client*>	_to_be_deleted;
