@@ -1,7 +1,7 @@
 #ifndef __VSP_H__
 #define __VSP_H__
 
-#include <string>
+//#include <string>
 
 namespace VSP {
   const size_t PORT_TCP = 4242;

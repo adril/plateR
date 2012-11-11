@@ -47,28 +47,53 @@ std::cout << "((RVSP::Header *)message.getHeader())->size_struct = " << ((RVSP::
 //second
 
 void LProtocol::loginHandler(Message &message) {
-	if (this->_delegate)
-		this->_delegate->loginHandler(message);
+	if (this->_delegate) {
+		MessageLogin *customMessage = new MessageLogin(message);
+		customMessage->decodeBody();
+		customMessage->debug();
+
+		this->_delegate->loginHandler(*customMessage);
+	}
 }
 
 void LProtocol::loginResultHandler(Message &message) {
-	if (this->_delegate)
-		this->_delegate->loginResultHandler(message);
+	if (this->_delegate) {
+		MessageLoginResult *customMessage = new MessageLoginResult(message);
+		customMessage->decodeBody();
+		customMessage->debug();
+
+		this->_delegate->loginResultHandler(*customMessage);
+	}
 }
 
 void LProtocol::logOutHandler(Message &message) {
-	if (this->_delegate)
+	if (this->_delegate) {
+		MessageLogOut *customMessage = new MessageLogOut(message);
+		customMessage->decodeBody();
+		customMessage->debug();
+
 		this->_delegate->logOutHandler(message);
+	}
 }
 
 void LProtocol::plateHandler(Message &message) {
-	if (this->_delegate)
+	if (this->_delegate) {
+		MessagePlate *customMessage = new MessagePlate(message);
+		customMessage->decodeBody();
+		customMessage->debug();
+
 		this->_delegate->plateHandler(message);
+	}
 }
 
 void LProtocol::fileHandler(Message &message) {
-	if (this->_delegate)
+	if (this->_delegate) {
+		MessageFile *customMessage = new MessageFile(message);
+		customMessage->decodeBody();
+		customMessage->debug();
+
 		this->_delegate->fileHandler(message);
+	}
 }
 
 void LProtocol::unknowMessageHandler(Message &message) {

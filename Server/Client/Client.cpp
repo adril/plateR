@@ -6,7 +6,7 @@ Client::Client(tcp::io_service& io_service) : _socket(io_service) {
 	_protocol->_delegate = this;
 	_inputMessage = new Message;
 
-	debug();
+	//debug();
 
 	memset(_userInfo.login, 0, sizeof(Login));
 	memcpy(_userInfo.login, "nameless", sizeof("nameless"));
@@ -77,14 +77,17 @@ void Client::readHeaderHandler(const boost::system::error_code& error, size_t by
 	//TODO: do job on the message
 
 	this->_inputMessage->decodeHeader();
+	this->_inputMessage->debug();
 
+	//TODO: if bad header -> 	readheader(error); and clean the Message
 	readBody(error);
 }
 
 void Client::readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred) {
-	this->_inputMessage->decodeBody();
+	//this->_inputMessage->decodeBody();
 	this->_protocol->receiveMessage(*this->_inputMessage);
-	this->_inputMessage->clean();
+	//this->_inputMessage->clean();
+	readHeader(error);
 }
 
 void Client::writeFinish(const boost::system::error_code &error, uint8_t *data) {
@@ -128,6 +131,8 @@ void Client::sendMessage(Message &message)
 
 void Client::loginHandler(Message &message) {
 
+	message.debug();
+	///((MessageLogin)message).debug();
 
 	Message *answerMessage = this->headerMessage(VSP::LOGIN_RESULT);
 	MessageLoginResult *customMessage = new MessageLoginResult(*answerMessage, VSP::LOGIN_RESULT, VSP::OK);

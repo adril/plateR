@@ -130,13 +130,14 @@ void Message::encodeData() {
 	this->_data = new char[dataLength];
 	std::memset(this->_data, '\0', dataLength);
 
-	std::memcpy(this->_data, &this->_header, this->getHeaderLength());
-	std::memcpy(this->_data + this->getHeaderLength(), &this->_body, this->getBodyLength());//this->bodyLength_);
+	std::memcpy(this->_data, this->_header, this->getHeaderLength());
+	std::memcpy(this->_data + this->getHeaderLength(), this->_body, this->getBodyLength());//this->bodyLength_);
 }
 
 void Message::decodeHeader() {
 	this->_type = reinterpret_cast<VSP::Header *>(this->_header)->type;
 	this->_bodyLength = this->_dataTypeSizeMap[(int)this->_type];
+	this->_error = reinterpret_cast<VSP::Header *>(this->_header)->error;
 
 	//init body
 	this->_body = new char[this->getBodyLength()];//this->bodyLength_);
