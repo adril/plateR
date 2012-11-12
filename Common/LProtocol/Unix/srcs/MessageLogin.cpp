@@ -2,35 +2,13 @@
 
 MessageLogin::MessageLogin(Message &other, char *login, char *password)
 	: Message(other) {
-
-		/* copy of header infos */
-		//this->_type = other.getType();
-		//this->_bodyLength = other.getBodyLength();
-
 		this->copyString(login, this->_login.login, VSP::LOGIN_SIZE);
 		this->copyString(password, this->_login.password, VSP::PASSWORD_SIZE);
 }
 
 MessageLogin::MessageLogin(Message &other)
 	: Message(other) {
-	std::cout  << "MessageLogin::MessageLogin(Message &other)" << std::endl;
-	/*
-	// copy of data
-	this->_header = new char[other.getHeaderLength()];
-	this->copyString(other.getHeader(), this->getHeader(), other.getHeaderLength());
-	//  std::memset(this->_header, '\0', other.getHeaderLength());
-	//  std::memcpy(this->_header, other.getHeader(), other.getHeaderLength());
-
-	this->_body = new char[other.getBodyLength()];
-	this->copyString(other.getBody(), this->getBody(), other.getBodyLength());
-	//  std::memset(this->_body, '\0', other.getBodyLength());
-	//  std::memcpy(this->_body, other.getBody(), other.getBodyLength());
-
-	// copy of header infos
-	this->_type = other.getType();
-	this->_bodyLength = other.getBodyLength();
-	*/
-
+		std::cout  << "MessageLogin::MessageLogin(Message &other)" << std::endl;
 }
 
 MessageLogin::~MessageLogin() {
@@ -43,19 +21,9 @@ void MessageLogin::encodeBody() {
 }
 
 void MessageLogin::decodeBody() {
-
-
-	//std::memset(this->_login.login, '\0', VSP::LOGIN_SIZE);
-	//std::strcpy(this->_login.login, reinterpret_cast<VSP::Login *>(this->_body)->login);
 	this->copyString(reinterpret_cast<VSP::Login *>(this->_body)->login, this->_login.login, VSP::LOGIN_SIZE);
-
-	//std::memset(this->_login.password, '\0', VSP::PASSWORD_SIZE);
-	//std::strcpy(this->_login.password, reinterpret_cast<VSP::Login *>(this->_body)->password);
 	this->copyString(reinterpret_cast<VSP::Login *>(this->_body)->password, this->_login.password, VSP::PASSWORD_SIZE);
-
 	this->_login.type = reinterpret_cast<VSP::Login *>(this->_body)->type;
-	//this->_login.login = (char *)reinterpret_cast<VSP::Login *>(this->_body)->login;
-	//this->_login.password = reinterpret_cast<VSP::Login *>(this->_body)->password;
 }
 
 void MessageLogin::debug() {

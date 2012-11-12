@@ -248,18 +248,20 @@ void readBodyHandler(const boost::system::error_code& error, size_t bytes_transf
 		  to_read = maxIdx - idx;
 		  to_write = to_read > VSP::FILE_SIZE ? VSP::FILE_SIZE : to_read;
 		  Message *message = new Message;
-		  MessageFile *customMessage = new MessageFile(*message, 'c', idx, maxIdx, (char*)filename.c_str(), to_read, (char*)buffer.c_str() + idx);
 
 		  message->encodeHeader(VSP::FILE);
 		  message->decodeHeader();
+		  
+		  MessageFile *customMessage = new MessageFile(*message, 'c', idx, maxIdx, (char*)filename.c_str(), to_read, (char*)buffer.c_str() + idx);
 		  customMessage->encodeBody();
 		  customMessage->encodeData();
-		  messageQueu.push(customMessage);
+		  sendMessage(*customMessage);
+		  //messageQueu.push(customMessage);
 
 		  idx += to_write;
 		  to_read = maxIdx - idx;
 	  }
-	sendMessageQueue(messageQueu);
+	//sendMessageQueue(messageQueu);
   }
 
 
@@ -368,7 +370,7 @@ int main(int argc, char* argv[])
     tcp::resolver r(io_service);
     client c(io_service);
 
-    c.start(r.resolve(tcp::resolver::query("127.0.0.1", "25493")));
+    c.start(r.resolve(tcp::resolver::query("127.0.0.1", "4242")));
 
     io_service.run();
   }

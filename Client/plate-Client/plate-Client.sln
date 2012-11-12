@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "plate-Client", "plate-Clien
 		{605F7460-0A6A-49D4-910C-154DE56B5C19} = {605F7460-0A6A-49D4-910C-154DE56B5C19}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LProtocol", "..\..\..\..\Desktop\Digital\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj", "{605F7460-0A6A-49D4-910C-154DE56B5C19}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LProtocol", "..\..\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj", "{605F7460-0A6A-49D4-910C-154DE56B5C19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
