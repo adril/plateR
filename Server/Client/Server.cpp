@@ -17,12 +17,7 @@ Server::Server() :
 
 Server::~Server()
 {
-	this->deleteClients();
-	while (!_clients.empty())
-	{
-		delete _clients.front();
-		_clients.pop_front();
-	}
+	stop();
 }
 
 // Internal IO functions
@@ -33,23 +28,40 @@ void Server::run()
 void Server::stop()
 {
 	_io_service.stop();
+	this->deleteClients();
+	while (!_clients.empty())
+	{
+		delete _clients.front();
+		_clients.pop_front();
+	}
 }
 
 /* CLIENT MANAGEMENT */
 void Server::areClientsAlive()
 {
 	/* CHECK EACH CLIENT */
-	_timer.expires_from_now(boost::posix_time::seconds(1));
+	_timer.expires_from_now(boost::posix_time::seconds(5));
 	_timer.async_wait(boost::bind(&Server::areClientsAlive, this));
+	deleteClients();
+}
+void Server::addClient(Client *cl)
+{
+	cl->start();
+	_clients.push_back(cl);
+	std::cout << std::endl << "New client connected from " << cl->getIpAsString() << std::endl;
+}
+void Server::removeClient(Client *cl)
+{
+	std::cout << std::endl << "Client disconnected from " << cl->getIpAsString() << std::endl;
+	_to_be_deleted.push_back(cl);
 }
 void Server::deleteClients()
 {
 	while (!_to_be_deleted.empty())
 	{
 		_clients.remove(_to_be_deleted.front());
-	    delete _to_be_deleted.front();
+		_to_be_deleted.pop_front();
 	}
-	/* DELETE THE CLIENT FROM TO_DELETED QUEUE */
 }
 
 void Server::startAccept()
@@ -65,23 +77,15 @@ void Server::startAccept()
 
 void Server::handleAccept(Client *cl, tcp::error_code error) {
   if (!error)
-    {
-      cl->start();
-      _clients.push_back(cl);
-      std::cout << std::endl << "New client connected from " << cl->getIpAsString() << std::endl;
-    }
+	addClient(cl);
   else
     {
       std::cout << "ACCEPT FAIL" << std::endl;
 	  disconectClient(cl);
-      // _to_be_deleted.push_back(cl);
     }
   startAccept();
 }
 
 void Server::disconectClient(void *client) {
-      std::cout << "Disconect client" << std::endl;
-       //_to_be_deleted.push_back(reinterpret_cast<Client *>(client));
-	   //delete reinterpret_cast<Client *>(client);
-	  deleteClients();
+	removeClient(reinterpret_cast<Client*>(client));
 }

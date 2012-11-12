@@ -35,6 +35,10 @@ private :
 	/* CLIENT MANAGEMENT */
 	void deleteClients();
 	void areClientsAlive();
+	void addClient(Client*);
+	void removeClient(Client*);
+
+
 };
 
 #endif
