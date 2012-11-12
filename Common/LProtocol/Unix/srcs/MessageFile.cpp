@@ -1,12 +1,12 @@
 #include "../include/MessageFile.hh"
 
-MessageFile::MessageFile(Message &other, char type, size_t indx, size_t max_indx, char *file_name, size_t to_read, char *file)
+MessageFile::MessageFile(Message &other, char type, size_t indx, size_t max_indx, char *code_file, size_t to_read, char *file)
   : Message(other) {
   this->_file.type = type;
   this->_file.indx = indx;
   this->_file.max_indx = max_indx;
 
-  this->copyString(file_name, this->_file.file_name, VSP::NAME_SIZE);
+  this->copyString(code_file, this->_file.code_file, VSP::NAME_SIZE);
 
   this->_file.to_read = to_read;
 
@@ -31,12 +31,12 @@ void MessageFile::decodeBody() {
   this->_file.max_indx = reinterpret_cast<VSP::File *>(this->_body)->max_indx;
   this->_file.to_read = reinterpret_cast<VSP::File *>(this->_body)->to_read;
 
-  this->copyString(reinterpret_cast<VSP::File *>(this->_body)->file_name, this->_file.file_name, VSP::NAME_SIZE);
+  this->copyString(reinterpret_cast<VSP::File *>(this->_body)->code_file, this->_file.code_file, VSP::CODE_FILE_SIZE);
   this->copyString(reinterpret_cast<VSP::File *>(this->_body)->file, this->_file.file, VSP::FILE_SIZE/*this->_file.to_read*/);
 }
 
 void MessageFile::debug() {
 	std::cout << "MessageLogOut::debug()" << std::endl;
-	std::cout << "type: " << (int)this->_file.type << " indx: " << this->_file.indx << " max_indx: " << this->_file.max_indx << " file_name: " << this->_file.file_name
+	std::cout << "type: " << (int)this->_file.type << " indx: " << this->_file.indx << " max_indx: " << this->_file.max_indx << " code_file: " << this->_file.code_file
 		<< " to_read: " << this->_file.to_read << " file: " << this->_file.file << std::endl;
 }

@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string>
 #include "Server.hpp"
+#include "AppData.hpp"
 
 Server::Server() : 
 	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), DEFAULT_PORT)),
@@ -12,6 +13,22 @@ Server::Server() :
 	_isRunning = true;
 	_timer.expires_from_now(boost::posix_time::seconds(1));
 	_timer.async_wait(boost::bind(&Server::areClientsAlive, this));
+	
+	// Init DataBase
+	std::string dbDirectory = AppData::getInstance()._appDirectory + "dataBase.db";
+	//AppData::getInstance()._dataBaseConnector = new DataBaseConnectorWithDatabasePath(dbDirectory);
+	//AppData::getInstance()._dataBaseConnector.openDatabase();
+	
+	// Init Config Manager
+	//AppData::getInstance()._configManager.initWithDataBase(AppData::getInstance()._dataBaseConnector);
+	//AppData::getInstance()._configManager.createDefaultParam("projetName", "ServerPlate");
+
+	/*
+	_configManager	---> initWithDataBase {
+		[this->_dataBase executeNonQuery("CREATE TABLE config (codeConfig TEXT, valeur TEXT)");
+		}
+	*/
+
 	startAccept();
 }
 
@@ -52,13 +69,14 @@ void Server::addClient(Client *cl)
 }
 void Server::removeClient(Client *cl)
 {
-	std::cout << std::endl << "Client disconnected from " << cl->getIpAsString() << std::endl;
+//	std::cout << std::endl << "Client disconnected from " << cl->getIpAsString() << std::endl;
 	_to_be_deleted.push_back(cl);
 }
 void Server::deleteClients()
 {
 	while (!_to_be_deleted.empty())
 	{
+		//INFO: du additional stuff on _to_be_deleted.front() if needed
 		_clients.remove(_to_be_deleted.front());
 		_to_be_deleted.pop_front();
 	}

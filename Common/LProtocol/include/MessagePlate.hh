@@ -9,13 +9,13 @@ class CLASSINDLL_CLASS_DECL MessagePlate : public Message {
 class MessagePlate : public Message {
 #endif
 public:
-	MessagePlate(Message &other, char type, char *codePlate, char *name, char *codeImage, char state);
+	MessagePlate(Message &other, char type, char *codePlate, char *name, char *codeFile, char state);
 	MessagePlate(Message &);
 	virtual ~MessagePlate();
 	virtual void encodeBody();
 	virtual void decodeBody();
 	virtual void debug();
-private:
+public:
 	VSP::Plate _plate;
 };
 

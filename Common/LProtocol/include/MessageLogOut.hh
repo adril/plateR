@@ -15,7 +15,7 @@ public:
 	virtual void encodeBody();
 	virtual void decodeBody();
 	virtual void debug();;
-private:
+public:
 	VSP::LogOut _logOut;
 };
 

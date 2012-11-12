@@ -14,12 +14,6 @@
 #define DEFAULT_PORT 4242//25493
 #define	BUF_SIZE 4096
 
-typedef char Login [25];
-typedef char Password [25];
-typedef uint32_t Token;
-typedef char IP [17];
-typedef uint16_t Port;
-
 namespace tcp
 {
 	typedef boost::system::error_code error_code;
@@ -29,24 +23,5 @@ namespace tcp
 	typedef boost::asio::ip::tcp::endpoint endpoint;
 	typedef boost::asio::deadline_timer deadline_timer;
 };
-
-struct buffer_t
-{
-    uint8_t buffer[BUF_SIZE];
-    unsigned int offset;
-    buffer_t() {offset = 0; memset(buffer, 0, BUF_SIZE);}
-};
-
-#pragma pack(push)
-#pragma pack(1)
-
-struct userInfo {
-  Login		 login;
-  Password   pass;
-  Token		 token;
-  IP		 ip;
-};
-
-#pragma pack(pop)
 
 #endif

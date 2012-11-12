@@ -79,12 +79,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AppData.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Common.hpp" />
     <ClInclude Include="IServerDelegate.hpp" />
     <ClInclude Include="Server.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AppData.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />

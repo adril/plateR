@@ -27,6 +27,9 @@
     <ClInclude Include="IServerDelegate.hpp">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="AppData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AppData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

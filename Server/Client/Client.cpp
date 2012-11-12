@@ -1,8 +1,13 @@
 #include "Client.hpp"
+#include "AppData.hpp"
 
 Client::Client(tcp::io_service& io_service) : _socket(io_service) {
 	_timestamp = 0.0;
 	_protocol = new LProtocol(this);
+	Message *message = headerMessage(VSP::LOGIN);
+	_userInfo = NULL;
+
+	std::cout << "_appDirectory: " << AppData::getInstance()._appDirectory << std::endl;;
 }
 Client::~Client() {
 	boost::system::error_code err;
@@ -54,16 +59,16 @@ void Client::writeFinish(const boost::system::error_code &error, uint8_t *data) 
 	//TODO: clean message
 	if (data != NULL)
 		delete[] data;
+	_inputMessage->clean();
 	if (checkError(error))
 		return;
 	else
-      std::cout << "Client::handle_output. SUCESS !" << std::endl;
+		std::cout << "Client::writeFinish. SUCESS !" << std::endl;
 }
 
 /* SEND / RECEIVE MESSAGE */
 
-void Client::sendMessage(Message &message)
-{
+void Client::sendMessage(Message &message) {
 	boost::asio::async_write(this->_socket,
 		boost::asio::buffer((unsigned char *)message.getData(), message.getDataLength()),
 		boost::bind(&Client::writeFinish, this,
@@ -74,27 +79,42 @@ void Client::sendMessage(Message &message)
 
 //TODO: do the job and answer to the client
 
-void Client::loginHandler(Message &message) {
-	// check username and password in DB
+void Client::loginHandler(MessageLogin &message) {
+	char result;
+
 	Message *answerMessage = this->headerMessage(VSP::LOGIN_RESULT);
-	MessageLoginResult *customMessage = new MessageLoginResult(*answerMessage, VSP::LOGIN_RESULT, VSP::OK);
+	//TODO: check if user and password in DB
+	result = VSP::OK;
+
+	if (result == VSP::OK) {
+		Message *messageLogin = headerMessage(VSP::LOGIN);
+		_userInfo = new MessageLogin(*messageLogin, message._login.login, message._login.password);
+		//_userInfo->encodeBody();
+		//_userInfo->encodeData();
+	}
+	MessageLoginResult *customMessage = new MessageLoginResult(*answerMessage, VSP::LOGIN_RESULT, result);
 	customMessage->encodeBody();
 	customMessage->encodeData();
+
 	sendMessage(*customMessage);
 }
 
-void Client::loginResultHandler(Message &message) {
+void Client::loginResultHandler(MessageLoginResult &message) {
+	//INFO: never call
 }
 
-void Client::logOutHandler(Message &message) {
-
+void Client::logOutHandler(MessageLogOut &message) {
+	//INFO: client whant to be disconnected
+	disconect();
 }
 
-void Client::plateHandler(Message &message) {
-
+void Client::plateHandler(MessagePlate &message) {
+	//INFO: client want to know to the plate number for code_file
+	//if can answer directly send MessagePlate with the good value
+	//else put to treatment queue
 }
 
-void Client::fileHandler(Message &message) {
+void Client::fileHandler(MessageFile &message) {
 
 }
 
@@ -113,14 +133,19 @@ Message *Client::headerMessage(char bodyType) {
 
 /* ERROR */
 
+void Client::disconect() {
+	std::cout << std::endl << "Client disconnected" << std::endl;
+	displayUserInfo();
+	if (this->_delegate)
+		this->_delegate->disconectClient(this);
+	delete this;
+}
+
 bool Client::checkError(const boost::system::error_code& error) {
 	if (error) {
-		if (this->_delegate) {
-			//TODO: check the error value
-			this->_delegate->disconectClient(this);
-			delete this;
-			return true;
-		}
+		//TODO: check the error value
+		disconect();
+		return true;
 	}
 	return false;
 }
@@ -142,6 +167,12 @@ void Client::setDelegate(IServerDelegate *delegate) {
 }
 
 /* DEBUG */
+
+void Client::displayUserInfo() const {
+	if (this->_userInfo) {
+		std::cout << "[" << getIpAsString() << "]" << " login: " << _userInfo->_login.login << " password: " << _userInfo->_login.password << std::endl;
+	}
+}
 
 void Client::debug() {
 

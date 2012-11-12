@@ -68,7 +68,7 @@ void LProtocol::logOutHandler(Message &message) {
 		customMessage->decodeBody();
 		customMessage->debug();
 
-		this->_delegate->logOutHandler(message);
+		this->_delegate->logOutHandler(*customMessage);
 	}
 }
 
@@ -78,7 +78,7 @@ void LProtocol::plateHandler(Message &message) {
 		customMessage->decodeBody();
 		customMessage->debug();
 
-		this->_delegate->plateHandler(message);
+		this->_delegate->plateHandler(*customMessage);
 	}
 }
 
@@ -88,7 +88,7 @@ void LProtocol::fileHandler(Message &message) {
 		customMessage->decodeBody();
 		customMessage->debug();
 
-		this->_delegate->fileHandler(message);
+		this->_delegate->fileHandler(*customMessage);
 	}
 }
 

@@ -3,11 +3,11 @@
 
 class IProtocolDelegate {
 public:
-  virtual void loginHandler(Message &message) = 0;
-  virtual void loginResultHandler(Message &message) = 0;
-  virtual void logOutHandler(Message &message) = 0;
-  virtual void plateHandler(Message &message) = 0;
-  virtual void fileHandler(Message &message) = 0;
+  virtual void loginHandler(MessageLogin &message) = 0;
+  virtual void loginResultHandler(MessageLoginResult &message) = 0;
+  virtual void logOutHandler(MessageLogOut &message) = 0;
+  virtual void plateHandler(MessagePlate &message) = 0;
+  virtual void fileHandler(MessageFile &message) = 0;
   virtual void unknowMessageHandler(Message &message) = 0;
 };
 
