@@ -39,10 +39,6 @@ void LProtocol::receiveMessage(Message &message) {
 			this->unknowMessageHandler(message);
 	}
 }
-/*
-std::cout << "[LProtocol]connectionP_receive message of type Connetion with body command: "<< (int)((RVSP::Connection *)message.getBody())->command << std::endl;
-std::cout << "((RVSP::Header *)message.getHeader())->size_struct = " << ((RVSP::Header *)message.getHeader())->size_struct << std::endl;
-*/
 
 //second
 
@@ -103,7 +99,7 @@ void LProtocol::unknowMessageHandler(Message &message) {
 }
 
 void LProtocol::debug() {
-	std::cout << "LProtocol::debug()" << std::endl;
+	//std::cout << "LProtocol::debug()" << std::endl;
 }
 
 #ifdef _WIN32

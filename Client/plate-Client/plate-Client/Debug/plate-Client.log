@@ -1,5 +1,22 @@
-﻿Build started 11/12/2012 5:59:31 PM.
+﻿Build started 11/12/2012 9:11:29 PM.
+     1>Project "C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\plate-Client\plate-Client.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\JD\Desktop\Digital\plateR\Common\LProtocol\include /IC:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0 /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /I"Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0" /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Client.cpp
+         Client.cpp
+         Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+         - add -D_WIN32_WINNT=0x0501 to the compiler command line; or
+         - add _WIN32_WINNT=0x0501 to your project's Preprocessor Definitions.
+         Assuming _WIN32_WINNT=0x0501 (i.e. Windows XP target).
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\rc.exe /l"0x0409" /nologo /fo"Debug\plate-Client.res" plate-Client.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.lib" /MACHINE:X86 "Debug\plate-Client.res"
+         Debug\Client.obj
+         "C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\LProtocol.lib"
+            Creating library C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.lib and object C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.exp
+         plate-Client.vcxproj -> C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\Debug\plate-Client.exe
+     1>Done Building Project "C:\Users\JD\Desktop\Digital2\plateR\Client\plate-Client\plate-Client\plate-Client.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.47
+Time Elapsed 00:00:06.41

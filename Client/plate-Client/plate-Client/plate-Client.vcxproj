@@ -40,13 +40,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,7 +82,7 @@
     <ResourceCompile Include="plate-Client.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Desktop\Digital\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj">
+    <ProjectReference Include="..\..\..\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj">
       <Project>{605f7460-0a6a-49d4-910c-154de56b5c19}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -12,35 +12,23 @@ Message::Message(Message const& other) {
 	std::cout  << "[Message] (Message const& other)" << std::endl;
 
 	this->initDataTypeSizeMap();
-	//this->_error = VSP::ERROR_NOTHING;
 
 	/* copy of data */
 
-	/*
-	this->_header = new char[other.getHeaderLength()];
-	std::memset(this->_header, '\0', other.getHeaderLength());
-	std::memcpy(this->_header, other.getHeader(), other.getHeaderLength());
-	*/
-
-	//  this->_header = other.getHeader();
 	this->_header = other.getHeader();
 	this->_body = other.getBody();
-
 	///this->_data = other.getData();
 
 	/* copy of header infos */
 	this->_type = other.getType();
 	this->_bodyLength = other.getBodyLength();
-	//  this->_login = other.getLogin();
+
 	this->_error = other.getError();
 }
 
 Message::~Message() {
 	std::cout << "Message::~Message"<< std::endl;
-	//  this->sendList_.erase(this->sendList_.begin(), this->sendList_.end());
-	// delete[] this->body_;
-	// delete[] this->_header;
-	// delete[] this->data_;
+	clean();
 }
 
 void Message::initDataTypeSizeMap() {
@@ -72,7 +60,7 @@ size_t Message::getBodyLength() const {
 }
 
 size_t Message::getDataLength() const {
-	return this->getHeaderLength() + this->getBodyLength();//_bodyLength;
+	return this->getHeaderLength() + this->getBodyLength();
 }
 
 char Message::getType() const {
@@ -93,8 +81,8 @@ void Message::encodeHeader(char type) {
 	VSP::Header header;
 
 	header.type = type;
-	header.body_size = this->_dataTypeSizeMap[type];//this->getHeaderLength();
-	header.error = this->_error;//VSP::ERROR_NOTHING;
+	header.body_size = this->_dataTypeSizeMap[type];
+	header.error = this->_error;
 
 	std::memset(this->_header, '\0', this->getHeaderLength());
 	std::memcpy(this->_header, &header, this->getHeaderLength());
@@ -103,21 +91,11 @@ void Message::encodeHeader(char type) {
 void Message::encodeHeader() {
 	std::cout << "[Message] encodeHeader" << std::endl;
 	this->encodeHeader(this->_type);
-	/*
-	VSP::Header tmp;
-
-	tmp.type = this->_type;
-	tmp.body_size = this->_dataTypeSizeMap[this->_type];//this->getHeaderLength();
-	tmp.error = this->_error;
-
-	std::memset(this->_header, '\0', this->getHeaderLength());
-	std::memcpy(this->_header, &tmp, this->getHeaderLength());
-	*/
 }
 
 void Message::encodeBody() {
 	std::cout << "[Message] encodeBody -> neverCall"<< std::endl;
-	//to impl in inherit obj
+	//TODO: to impl in inherit obj [OK]
 }
 
 void Message::decodeBody() {
@@ -131,7 +109,7 @@ void Message::encodeData() {
 	std::memset(this->_data, '\0', dataLength);
 
 	std::memcpy(this->_data, this->_header, this->getHeaderLength());
-	std::memcpy(this->_data + this->getHeaderLength(), this->_body, this->getBodyLength());//this->bodyLength_);
+	std::memcpy(this->_data + this->getHeaderLength(), this->_body, this->getBodyLength());
 }
 
 void Message::decodeHeader() {
@@ -140,15 +118,16 @@ void Message::decodeHeader() {
 	this->_error = reinterpret_cast<VSP::Header *>(this->_header)->error;
 
 	//init body
-	this->_body = new char[this->getBodyLength()];//this->bodyLength_);
-	std::memset(this->_body, '\0', this->getBodyLength());//this->bodyLength_);
+	this->_body = new char[this->getBodyLength()];
+	std::memset(this->_body, '\0', this->getBodyLength());
 }
 
 void Message::clean() {
-	delete[] this->_body;
-	delete[] this->_header;
-	delete[] this->_data;
+	//delete[] this->_body;
+	//delete[] this->_header;
+	//delete[] this->_data;
 }
+
 //INFO: tools
 
 void Message::copyString(char *src, char *dest, size_t size) {
