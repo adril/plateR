@@ -51,12 +51,8 @@ private :
 	bool checkError(const boost::system::error_code& error);
 
 	// Internal IO functions
-	void read(const boost::system::error_code& error);
 	void writeFinish(const boost::system::error_code &error, uint8_t *data);
-	//INFO: out of business
-	void handle_output(uint8_t*, int);
-	void handle_input(const boost::system::error_code& error, size_t bytes_transferred);
-
+	
 	void sendMessage(Message &msg);
 	//INFO: Message
 	Message *headerMessage(char bodyType);

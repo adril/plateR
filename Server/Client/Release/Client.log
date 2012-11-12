@@ -1,9 +1,22 @@
-﻿Build started 11-Nov-12 11:41:57 PM.
-     1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Clean target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\Server.lastbuildstate".
-     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Clean target(s)).
+﻿Build started 11/12/2012 5:50:42 PM.
+     1>Project "C:\Users\JD\Desktop\Digital2\plateR\Server\Client\Client.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\JD\Desktop\Digital2\plateR\Server\Client\..\..\Common\LProtocol\include /I"Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0" /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /IC:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include /IC:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0 /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _MBCS /D _MBCS /D _WIN32_WINNT=0x0501 /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Client.cpp Server.cpp main.cpp
+         Client.cpp
+         Server.cpp
+     1>Server.cpp(11): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
+         main.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.exe" /NOLOGO /LIBPATH:"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Release" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.lib" /MACHINE:X86 /SAFESEH Release\Client.obj
+         Release\main.obj
+         Release\Server.obj
+         C:\Users\JD\Desktop\Digital2\plateR\Server\Release\LProtocol.lib
+            Creating library C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.lib and object C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.exp
+         Generating code
+         Finished generating code
+         Client.vcxproj -> C:\Users\JD\Desktop\Digital2\plateR\Server\Release\Server.exe
+     1>Done Building Project "C:\Users\JD\Desktop\Digital2\plateR\Server\Client\Client.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.30
+Time Elapsed 00:00:11.18

@@ -69,7 +69,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBPROTOCOL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;$(ProjectDir)..\..\..\Common\LProtocol\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;$(ProjectDir)..\..\..\Common\LProtocol\include;C:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
