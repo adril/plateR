@@ -21,7 +21,9 @@ private :
 	MessageLogin *_userInfo;
 	double		_timestamp;
 	IServerDelegate *_delegate;
-	std::string _fileBuffer;
+
+	std::string				_fileBuffer;
+	std::list<std::string>	_fileBuffers;
 	boost::asio::deadline_timer	_timer;
 	std::list<Message *> _messages;
 
@@ -48,6 +50,10 @@ public:
 	virtual void plateHandler(MessagePlate &message);
 	virtual void fileHandler(MessageFile &message);
 	virtual void unknowMessageHandler(Message &message);
+
+	/* SERVER OUTPUT */
+	void sendPlateInfo(std::string);
+	void sendLogout();
 private:
 	void disconect();
 

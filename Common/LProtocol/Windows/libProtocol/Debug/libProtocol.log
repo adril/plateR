@@ -1,5 +1,19 @@
-﻿Build started 13-Nov-12 2:57:58 AM.
+﻿Build started 11/13/2012 4:34:19 PM.
+     1>Project "C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /IC:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D LIBPROTOCOL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Unix\srcs\MessageFile.cpp
+         MessageFile.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\JD\Desktop\Digital3\plateR\Server\Debug\LProtocol.dll" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\JD\Desktop\Digital3\plateR\Server\Debug\LProtocol.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\JD\Desktop\Digital3\plateR\Server\Debug\LProtocol.lib" /MACHINE:X86 /DLL Debug\LProtocol.obj
+         Debug\Message.obj
+         Debug\MessageFile.obj
+         Debug\MessageLogin.obj
+         Debug\MessageLoginResult.obj
+         Debug\MessageLogOut.obj
+         Debug\MessagePlate.obj
+         libProtocol.vcxproj -> C:\Users\JD\Desktop\Digital3\plateR\Server\Debug\LProtocol.dll
+     1>Done Building Project "C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.11
+Time Elapsed 00:00:01.61
