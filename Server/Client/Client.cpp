@@ -5,6 +5,7 @@
 #include "Client.hpp"
 #include "FileTools.hpp"
 #include "AppData.hpp"
+#include "Tools.hpp"
 
 Client::Client(tcp::io_service& io_service) : _socket(io_service), _timer(io_service) {
 	this->_timestamp = 0.0;
@@ -160,13 +161,31 @@ void Client::plateHandler(MessagePlate &message) {
 	//INFO: client want to know to the plate number for code_file
 	//if can answer directly send MessagePlate with the good value
 	//else put code_file for this client to the treatment queue
+
 }
 
 void Client::fileHandler(MessageFile &message) {
+	std::string b(message._file.file, message._file.to_read);
 
-	this->_fileBuffer += message._file.file;
+	this->_fileBuffers.push_back(b);
 	if (message._file.indx == message._file.max_indx) {
-		std::string filePath = "C:\\";//AppData::getInstance()._appDirectory;
+		std::string imageBuffer;
+
+		while (!_fileBuffers.empty())
+		{
+			imageBuffer += _fileBuffers.front();
+			_fileBuffers.pop_front();
+		}
+
+		bool ret = FileTools::writeStringToFile(imageBuffer, "serverVerifUpload.jpg");
+		if (!ret) {
+			std::cout << "FAILED: " << "Writting file on path: " << message._file.code_file << std::endl;
+		}
+	}
+	message.clean();
+	/*this->_fileBuffer += message._file.file;
+	if (message._file.indx == message._file.max_indx) {
+		std::string filePath = "";//AppData::getInstance()._appDirectory;
 		filePath  += message._file.code_file;
 		std::cout << "Writting file on path: " << filePath << std::endl;
 		bool ret = FileTools::writeStringToFile(this->_fileBuffer, filePath);
@@ -174,13 +193,13 @@ void Client::fileHandler(MessageFile &message) {
 			std::cout << "FAILED: " << "Writting file on path: " << filePath << std::endl;
 		}
 		this->_fileBuffer = "";
-	}
-	message.clean();
+	}*/
 }
 
 void Client::unknowMessageHandler(Message &message) {
 
 }
+
 
 /* Message */
 

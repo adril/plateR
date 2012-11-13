@@ -183,24 +183,6 @@ private:
 		}
 	}
 
-	std::string readFile(std::string filename)
-	{
-		unsigned int size = 0;
-		char *memblock;
-
-		std::ifstream file (filename.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
-		if (file.is_open())
-		{
-			size = (unsigned int)file.tellg();
-			memblock = new char[size];
-			file.seekg (0, std::ios::beg);
-			file.read (memblock, size);
-			file.close();
-			std::string buffer(memblock, size);
-			return buffer;
-		}
-		return NULL;
-	}
 	void sendMessage(Message &msg)
 	{
 		boost::asio::async_write(socket_, 
@@ -237,48 +219,10 @@ private:
 		customMessage->encodeData();
 		sendMessage(*customMessage);
 	}
-	/*
-	void sendFile(std::string filename)
-	{
-		std::string bufferVerif = "";
 
-		std::string buffer = readFile(filename.c_str());
-		std::queue<Message*> messageQueu;
-		unsigned int countMsg = 0, fileSize = buffer.length();
-		size_t	idx = 0, maxIdx = buffer.length(), to_read = 0, to_write = 0;
-		countMsg = buffer.length() > VSP::FILE_SIZE ? buffer.length() / VSP::FILE_SIZE : 1;
-
-		for (unsigned int i = 0; i <= countMsg; i++)
-		{
-			to_read = maxIdx - idx;
-			to_write = to_read > VSP::FILE_SIZE ? VSP::FILE_SIZE : to_read;
-			Message *message = new Message;
-
-			message->encodeHeader(VSP::FILE);
-			message->decodeHeader();
-
-			MessageFile *customMessage = new MessageFile(*message, 'c', idx + to_write, maxIdx, (char*)filename.c_str(), to_read, (char*)buffer.c_str() + idx);
-			customMessage->encodeBody();
-			customMessage->encodeData();
-			sendMessage(*customMessage);
-			//messageQueu.push(customMessage);
-			bufferVerif += (char*)buffer.c_str() + idx;
-
-			idx += to_write;
-			to_read = maxIdx - idx;
-		}
-		if (FileTools::writeStringToFile(bufferVerif, "C:\\verifUpload.jpg"))
-			std::cout << "FileTools::writeStringToFile: SUCESS" << std::endl;
-		else
-			std::cout << "FileTools::writeStringToFile: FAILED" << std::endl;
-
-
-		//sendMessageQueue(messageQueu);
-	}
-	*/
 	void sendFile(std::string filename) {
-		std::string buffer = readFile(filename.c_str());
-		std::string bufferVerif = "";
+		std::string buffer = FileTools::readStringFromFile(filename.c_str());
+		std::list<std::string> bufferVerif;
 
 		if (buffer.length() == 0)
 			return;
@@ -290,31 +234,33 @@ private:
 		size_t dataWritten = 0;
 		char dataToSend[VSP::FILE_SIZE];
 
+
 		for (int i = 0; i <= nbMessage; i++) {
 			rangeToRead.location = dataWritten;
 			rangeToRead.length = (dataWritten + VSP::FILE_SIZE > dataFileLength) ? dataFileLength - dataWritten : VSP::FILE_SIZE;
 			std::memset(dataToSend, '\0', VSP::FILE_SIZE);
-			//std::strcpy(dataToSend, buffer.c_str() + rangeToRead.location);
 			std::memcpy(dataToSend, buffer.c_str() + rangeToRead.location, rangeToRead.length);
-			//INFO: make the message and send it
 			Message *message = new Message;
 
 			message->encodeHeader(VSP::FILE);
 			message->decodeHeader();
 
-			MessageFile *customMessage = new MessageFile(*message, 'c', i, nbMessage, (char*)filename.c_str(), rangeToRead.length, dataToSend );//(char*)buffer.c_str() + rangeToRead.location
+			MessageFile *customMessage = new MessageFile(*message, 'c', i, nbMessage, (char*)filename.c_str(), rangeToRead.length, dataToSend );
 			customMessage->encodeBody();
 			customMessage->encodeData();
 			sendMessage(*customMessage);
 
-			//
-			//bufferVerif += (char*)buffer.c_str() + rangeToRead.location;
-			bufferVerif += dataToSend;
-
+			std::string data(dataToSend, rangeToRead.length);
+			bufferVerif.push_back(data);
 			dataWritten += rangeToRead.length;
 		}
-		//ERROR: bad split --> check with bufferVerif (il est presque 10 h 00 du matin)
-		if (FileTools::writeStringToFile(bufferVerif, "C:\\verifUpload.jpg"))
+		std::string b;
+		while (!bufferVerif.empty())
+		{
+			b += bufferVerif.front();
+			bufferVerif.pop_front();
+		}
+		if (FileTools::writeStringToFile(b, "verifUpload.jpg"))
 			std::cout << "FileTools::writeStringToFile: SUCESS" << std::endl;
 		else
 			std::cout << "FileTools::writeStringToFile: FAILED" << std::endl;
@@ -395,7 +341,24 @@ private:
 
 	void fileHandler(MessageFile &message) 
 	{
-		std::cout << "FILE" << std::endl;
+		/*std::string b(message._file.file, message._file.to_read);
+
+		this->_fileBuffers.push_back(b);
+		if (message._file.indx == message._file.max_indx) {
+			std::string imageBuffer;
+
+			while (!_fileBuffers.empty())
+			{
+				imageBuffer += _fileBuffers.front();
+				_fileBuffers.pop_front();
+			}
+
+			bool ret = FileTools::writeStringToFile(imageBuffer, "serverVerifUpload.jpg");
+			if (!ret) {
+				std::cout << "FAILED: " << "Writting file on path: " << message._file.code_file << std::endl;
+			}
+		}
+		message.clean();*/
 	}
 
 	void unknowMessageHandler(Message &message) {
