@@ -1,6 +1,8 @@
 #ifndef __VSP_H__
 #define __VSP_H__
 
+#define IS_IN_RANGE(X, Y, Z) (X >= Y ? (X <= Z ? true : false) : false)
+
 namespace VSP {
   const size_t PORT = 4242;
   const size_t LOGIN_SIZE = 25;

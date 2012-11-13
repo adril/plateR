@@ -15,8 +15,6 @@
 
 #include "IProtocolDelegate.hh"
 
-#define IS_IN_RANGE(X, Y, Z) (X >= Y ? (X <= Z ? true : false) : false)
-
 #ifdef WIN32
 class CLASSINDLL_CLASS_DECL LProtocol : public IProtocol {
 #else

@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>-D_WIN32_WINNT=0x0501 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -79,6 +79,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\Tools\FileTools.hpp" />
+    <ClInclude Include="..\..\Common\Tools\Tools.hpp" />
     <ClInclude Include="AppData.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Common.hpp" />
@@ -86,6 +88,8 @@
     <ClInclude Include="Server.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Common\Tools\FileTools.cpp" />
+    <ClCompile Include="..\..\Common\Tools\Tools.cpp" />
     <ClCompile Include="AppData.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />

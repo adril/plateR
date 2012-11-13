@@ -28,7 +28,7 @@ Message::Message(Message const& other) {
 
 Message::~Message() {
 	std::cout << "Message::~Message"<< std::endl;
-	clean();
+	//clean();
 }
 
 void Message::initDataTypeSizeMap() {
@@ -122,10 +122,16 @@ void Message::decodeHeader() {
 	std::memset(this->_body, '\0', this->getBodyLength());
 }
 
+bool Message::isValidHeader() {
+	return (IS_IN_RANGE(getType(), VSP::LOGIN, VSP::FILE));
+}
+
 void Message::clean() {
-	//delete[] this->_body;
-	//delete[] this->_header;
-	//delete[] this->_data;
+	delete[] this->_body;
+	std::cout << "Message::clean" << std::endl;
+	delete[] this->_header;
+	///if (this->_data)
+		//delete[] this->_data;
 }
 
 //INFO: tools

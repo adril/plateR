@@ -6,7 +6,7 @@
 #include "AppData.hpp"
 
 Server::Server() : 
-	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), DEFAULT_PORT)),
+	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), VSP::PORT)),
 	_timer(_io_service)
 {
 	srand(time(NULL));
@@ -32,18 +32,16 @@ Server::Server() :
 	startAccept();
 }
 
-Server::~Server()
-{
+Server::~Server() {
 	stop();
 }
 
 // Internal IO functions
-void Server::run()
-{
+void Server::run() {
 	_io_service.run();
 }
-void Server::stop()
-{
+
+void Server::stop() {
 	_io_service.stop();
 	this->deleteClients();
 	while (!_clients.empty())
@@ -54,26 +52,22 @@ void Server::stop()
 }
 
 /* CLIENT MANAGEMENT */
-void Server::areClientsAlive()
-{
+void Server::areClientsAlive() {
 	/* CHECK EACH CLIENT */
 	_timer.expires_from_now(boost::posix_time::seconds(5));
 	_timer.async_wait(boost::bind(&Server::areClientsAlive, this));
 	deleteClients();
 }
-void Server::addClient(Client *cl)
-{
+void Server::addClient(Client *cl) {
 	cl->start();
 	_clients.push_back(cl);
 	std::cout << std::endl << "New client connected from " << cl->getIpAsString() << std::endl;
 }
-void Server::removeClient(Client *cl)
-{
+void Server::removeClient(Client *cl) {
 //	std::cout << std::endl << "Client disconnected from " << cl->getIpAsString() << std::endl;
 	_to_be_deleted.push_back(cl);
 }
-void Server::deleteClients()
-{
+void Server::deleteClients() {
 	while (!_to_be_deleted.empty())
 	{
 		//INFO: du additional stuff on _to_be_deleted.front() if needed
@@ -82,8 +76,7 @@ void Server::deleteClients()
 	}
 }
 
-void Server::startAccept()
-{
+void Server::startAccept() {
 	Client	*new_client = new Client(_io_service);
 
 	new_client->setDelegate(this);
@@ -96,8 +89,7 @@ void Server::startAccept()
 void Server::handleAccept(Client *cl, tcp::error_code error) {
   if (!error)
 	addClient(cl);
-  else
-    {
+  else {
       std::cout << "ACCEPT FAIL" << std::endl;
 	  disconectClient(cl);
     }

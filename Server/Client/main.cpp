@@ -1,10 +1,11 @@
 #include <time.h>
 #include "server.hpp"
+//#include "VSP.h"
 
 int	main(int argc,  char **argv)
 {
 
-  std::cout << "--> Server Listening on port " << DEFAULT_PORT << " <--" << std::endl;
+  std::cout << "--> Server Listening on port " << VSP::PORT << " <--" << std::endl;
 	Server	*s = new Server();
 	s->run(); // Main Loop
 	delete s;

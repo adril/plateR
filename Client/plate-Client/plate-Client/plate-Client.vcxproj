@@ -46,7 +46,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,6 +67,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Common\Tools\FileTools.cpp" />
+    <ClCompile Include="..\..\..\Common\Tools\Tools.cpp" />
     <ClCompile Include="Client.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +78,8 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Common\Tools\FileTools.hpp" />
+    <ClInclude Include="..\..\..\Common\Tools\Tools.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

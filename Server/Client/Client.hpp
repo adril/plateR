@@ -1,6 +1,13 @@
 #ifndef _CLIENT_HPP_
 #define _CLIENT_HPP_
 
+#include <iostream>
+#include <string>
+#include <list>
+#include <fstream>
+
+
+#include <list>
 #include "LProtocol.hh"
 #include "Common.hpp"
 #include "IServerDelegate.hpp"
@@ -11,9 +18,12 @@ private :
 	tcp::socket	 _socket;
 	LProtocol	*_protocol;
 	Message		*_inputMessage;
-	MessageLogin *_userInfo;	
+	MessageLogin *_userInfo;
 	double		_timestamp;
 	IServerDelegate *_delegate;
+	std::string _fileBuffer;
+	boost::asio::deadline_timer	_timer;
+	std::list<Message *> _messages;
 
 
 public:
@@ -29,6 +39,7 @@ public:
 	//INFO: setter
 	void setDelegate(IServerDelegate *delegate);
 
+	void messageHandler();
 
 	/* CALLBACK FOR LPROTOCOL */
 	virtual void loginHandler(MessageLogin &message);

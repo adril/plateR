@@ -6,7 +6,7 @@ MessageFile::MessageFile(Message &other, char type, size_t indx, size_t max_indx
   this->_file.indx = indx;
   this->_file.max_indx = max_indx;
 
-  this->copyString(code_file, this->_file.code_file, VSP::NAME_SIZE);
+  this->copyString(code_file, this->_file.code_file, VSP::CODE_FILE_SIZE);
 
   this->_file.to_read = to_read;
 
