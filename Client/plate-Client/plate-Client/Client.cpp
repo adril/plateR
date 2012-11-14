@@ -20,6 +20,8 @@ void Client::start(tcp::resolver::iterator endpoint_iter) {
 void Client::disconnect() {
 	this->_stopped = true;
 	boost::system::error_code ignored_ec;
+	
+	this->_getUpdatedTimer.cancel();
 	this->_socket.close(ignored_ec);
 	this->_deadline.cancel();
 	this->_heartbeat_timer.cancel();
