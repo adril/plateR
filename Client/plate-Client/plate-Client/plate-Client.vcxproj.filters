@@ -24,6 +24,18 @@
     <ClCompile Include="..\..\..\Common\Tools\Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AppData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Annotation\FileAnnotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Annotation\PlateAnnotation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\Desktop\Digital\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj.user" />
@@ -38,7 +50,22 @@
     <ClInclude Include="..\..\..\Common\Tools\Tools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IClientDelegate.hh">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Common\Tools\FileTools.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AppData.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Annotation\FileAnnotation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Annotation\PlateAnnotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

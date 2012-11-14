@@ -139,6 +139,7 @@ void Message::clean() {
 void Message::copyString(char *src, char *dest, size_t size) {
 	std::memset(dest, '\0', size);
 	std::strcpy(dest, src);
+	std::memcpy(dest, src, size);
 }
 
 void Message::debug() {

@@ -67,7 +67,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;Z:\Desktop\dev\trainning-china\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -79,22 +79,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\Annotation\FileAnnotation.h" />
+    <ClInclude Include="..\..\Common\Annotation\PlateAnnotation.h" />
     <ClInclude Include="..\..\Common\Tools\FileTools.hpp" />
+    <ClInclude Include="..\..\Common\Tools\StringTools.hpp" />
     <ClInclude Include="..\..\Common\Tools\Tools.hpp" />
     <ClInclude Include="AppData.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Common.hpp" />
+    <ClInclude Include="FileAnnotation.h" />
     <ClInclude Include="IServerDelegate.hpp" />
+    <ClInclude Include="PlateAnnotation.h" />
     <ClInclude Include="Server.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Common\Annotation\FileAnnotation.cpp" />
+    <ClCompile Include="..\..\Common\Annotation\PlateAnnotation.cpp" />
     <ClCompile Include="..\..\Common\Tools\FileTools.cpp" />
+    <ClCompile Include="..\..\Common\Tools\StringTools.cpp" />
     <ClCompile Include="..\..\Common\Tools\Tools.cpp" />
     <ClCompile Include="AppData.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
-    <ClCompile Include="ServerOutput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj">

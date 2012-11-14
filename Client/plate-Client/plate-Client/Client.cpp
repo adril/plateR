@@ -1,403 +1,353 @@
-//
-// async_tcp_client.cpp
-// ~~~~~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2011 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
+#include "Client.hpp"
 
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/asio.hpp>
+Client::Client(boost::asio::io_service& io_service)
+	: _stopped(false), _socket(io_service), _deadline(io_service), _heartbeat_timer(io_service), _getUpdatedTimer(io_service) {
+		this->_protocol = new LProtocol(this);
+		this->_delegate = NULL;
+		this->_fileBuffer = "";
+		this->_isLogin = false;
+}
 
-#include <boost/asio/deadline_timer.hpp>
-#include <boost/asio/io_service.hpp>
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/read_until.hpp>
-#include <boost/asio/streambuf.hpp>
-#include <boost/asio/write.hpp>
-#include <boost/bind.hpp>
-#include <iostream>
-#include <iostream>
-#include <fstream>
-#include <queue>
-#include "LProtocol.hh"
-#include "VSP.h"
+Client::~Client() {
+	boost::system::error_code err;
+}
 
-#include "Tools.hpp"
-#include "FileTools.hpp"
+void Client::start(tcp::resolver::iterator endpoint_iter) {
+	startConnect(endpoint_iter);
+	this->_deadline.async_wait(boost::bind(&Client::check_deadline, this));
+}
 
-using boost::asio::deadline_timer;
-using boost::asio::ip::tcp;
+void Client::disconnect() {
+	this->_stopped = true;
+	boost::system::error_code ignored_ec;
+	this->_socket.close(ignored_ec);
+	this->_deadline.cancel();
+	this->_heartbeat_timer.cancel();
+}
 
-
-class client : public IProtocolDelegate
-{
-public:
-	Message *_inputMessage;
-	LProtocol	*_protocol;
-
-	client(boost::asio::io_service& io_service)
-		: stopped_(false),
-		socket_(io_service),
-		deadline_(io_service),
-		heartbeat_timer_(io_service)
-	{
-		_protocol = new LProtocol;
-		_protocol->_delegate = this;
-		_inputMessage = new Message;
+void Client::startConnect(tcp::resolver::iterator endpoint_iter) {
+	if (endpoint_iter != tcp::resolver::iterator()) {
+		std::cout << "Trying " << endpoint_iter->endpoint() << "...\n";
+		this->_deadline.expires_from_now(boost::posix_time::seconds(60));
+		this->_socket.async_connect(endpoint_iter->endpoint(),
+			boost::bind(&Client::handleConnect,
+			this, _1, endpoint_iter));
 	}
+	else //INFO: may be notify the delegate
+		disconnect();
+}
 
+void Client::handleConnect(const boost::system::error_code& ec, tcp::resolver::iterator endpoint_iter) {
+	if (this->_stopped)
+		return;
 
-	void start(tcp::resolver::iterator endpoint_iter)
-	{
-
-		start_connect(endpoint_iter);
-		deadline_.async_wait(boost::bind(&client::check_deadline, this));
+	if (!this->_socket.is_open()) {
+		std::cout << "Connect timed out\n";
+		startConnect(++endpoint_iter);
 	}
-
-	void stop()
-	{
-		stopped_ = true;
-		boost::system::error_code ignored_ec;
-		socket_.close(ignored_ec);
-		deadline_.cancel();
-		heartbeat_timer_.cancel();
+	else if (ec) {
+		std::cout << "Connect error: " << ec.message() << "\n";
+		this->_socket.close();
+		startConnect(++endpoint_iter);
 	}
+	else {
+		std::cout << "Connected to " << endpoint_iter->endpoint() << "\n";
+		//INFO: start timer
+		/* Timer to get Updated */
+		this->_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(1));
+		this->_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
 
-private:
-	void start_connect(tcp::resolver::iterator endpoint_iter)
-	{
-		if (endpoint_iter != tcp::resolver::iterator())
-		{
-			std::cout << "Trying " << endpoint_iter->endpoint() << "...\n";
-			deadline_.expires_from_now(boost::posix_time::seconds(60));
-			socket_.async_connect(endpoint_iter->endpoint(),
-				boost::bind(&client::handle_connect,
-				this, _1, endpoint_iter));
+
+		sendLogin("jullien", "1234567");
+		startRead();
+		//sendFile("Smile-3.jpg", "Smile-3.jpg");
+		//sendFile("001.jpg", "001.jpg");
+		//sendFile("002.jpg", "002.jpg");
+		//sendFile("003.jpg", "003.jpg");
+		//sendFile("001.jpg", "001.jpg");
+		//sendFile("002.jpg", "002.jpg");
+		//sendFile("003.jpg", "003.jpg");
+	}
+}
+
+void Client::getUpdatedHandler(const boost::system::error_code &error) {
+	//WARNING: may have to use mutex
+	//INFO: info may be do it with Messages
+
+	if (error == boost::asio::error::operation_aborted)
+		return;
+
+	if (this->_isLogin == true) {
+
+		//TODO: check if new image have been add
+
+		//INFO: File
+		std::cout << "_sendFileList: " << this->_sendFileList.size() << std::endl;
+		while (!this->_sendFileList.empty()) {
+			std::cout << "_fileAnnotationList.front()._filePath: " << this->_sendFileList.front()._filePath << std::endl;
+			std::cout << "_fileAnnotationList.front()._codeFile: " << this->_sendFileList.front()._codeFile << std::endl;
+			sendFile(this->_sendFileList.front()._filePath, this->_sendFileList.front()._codeFile);
+			this->_sendFileList.pop_front();
 		}
-		else
-			stop();
+
+		//INFO: debug test
+		//this->_sendFileList.push_back(FileAnnotation("001.jpg", "001.jpg"));
+		//this->_sendFileList.push_back(FileAnnotation("002.jpg", "002.jpg"));
 	}
 
-	void handle_connect(const boost::system::error_code& ec, tcp::resolver::iterator endpoint_iter)
+	_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(10));
+	_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
+}
+
+
+void Client::startRead() {
+	const boost::system::error_code error;
+	read(error);
+}
+
+void Client::read(const boost::system::error_code& error) {
+	if (error) {
+		std::cout << "Client::read. ERROR !" << std::endl;
+		this->_socket.close();
+	}
+	else
+		readHeader(error);
+}
+
+void Client::readHeader(const boost::system::error_code& error) {
+	this->_inputMessage = new Message();
+	this->_socket.async_read_some(boost::asio::buffer((unsigned char *)this->_inputMessage->getHeader(), this->_inputMessage->getHeaderLength()),
+		boost::bind(&Client::readHeaderHandler, this,
+		boost::asio::placeholders::error,
+		boost::asio::placeholders::bytes_transferred));
+}
+
+void Client::readBody(const boost::system::error_code& error) {
+	this->_socket.async_read_some(boost::asio::buffer((unsigned char *)this->_inputMessage->getBody(), this->_inputMessage->getBodyLength()),
+		boost::bind(&Client::readBodyHandler, this,
+		boost::asio::placeholders::error,
+		boost::asio::placeholders::bytes_transferred));
+}
+
+void Client::readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred) {
+	this->_inputMessage->decodeHeader();
+
+	if (!this->_inputMessage->isValidHeader()){
+		std::cout << "-------------Client::readHeaderHandler -> invalid Message-------------" << std::endl;
+
+		disconnect();
+		return;
+	}
+	if (bytes_transferred != this->_inputMessage->getHeaderLength()) {
+		std::cout << "-------------Client::readHeaderHandler -> size Message [" << this->_inputMessage->getBodyLength() << "] != bytes_transferred ["  << bytes_transferred << "]-------------" << std::endl;
+		disconnect();
+		return;
+
+	}
+	readBody(error);
+}
+
+void Client::readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred) {
+	std::cout << "{BODY} bytes_transferred : " << bytes_transferred << std::endl;
+	this->_protocol->receiveMessage(*this->_inputMessage);
+
+	read(error);
+}
+
+/* Send */
+
+void Client::sendMessage(Message &msg) {
+	boost::asio::async_write(this->_socket, 
+		boost::asio::buffer((unsigned char *)msg.getData(), msg.getDataLength()),
+		boost::bind(&Client::handle_write, this, _1));
+}
+
+void Client::sendMessageQueue(std::queue<Message*> msgQueue) {
+	while (!msgQueue.empty())
 	{
-		if (stopped_)
-			return;
-
-		if (!socket_.is_open())
-		{
-			std::cout << "Connect timed out\n";
-			start_connect(++endpoint_iter);
-		}
-		else if (ec)
-		{
-			std::cout << "Connect error: " << ec.message() << "\n";
-			socket_.close();
-			start_connect(++endpoint_iter);
-		}
-		else
-		{
-			std::cout << "Connected to " << endpoint_iter->endpoint() << "\n";
-			//sendLogin("jullien", "1234567");
-			//sendLogout();
-			sendFile("Smile-3.jpg");
-			start_read();
-		}
+		sendMessage(*msgQueue.front());
+		msgQueue.pop();
 	}
+}
 
-	void start_read()
-	{
-		const boost::system::error_code error;
-		read(error);
-	}
+void Client::sendLogin(std::string username, std::string password) {
+	Message *message = headerMessage(VSP::LOGIN);
 
-	void read(const boost::system::error_code& error) {
-		if (error)
-		{
-			std::cout << "Client::handle_input. ERROR !" << std::endl;
-			socket_.close();
-		}
-		else
-			readHeader(error);
-	}
-	void readHeader(const boost::system::error_code& error) {
-		this->_inputMessage = new Message();
-		socket_.async_read_some(boost::asio::buffer((unsigned char *)this->_inputMessage->getHeader(), this->_inputMessage->getHeaderLength()),
-			boost::bind(&client::readHeaderHandler, this,
-			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred));
-	}
+	MessageLogin *customMessage = new MessageLogin(*message,  (char*)username.c_str(), (char*)password.c_str());
+	customMessage->encodeBody();
+	customMessage->encodeData();
+	sendMessage(*customMessage);
+}
 
-	void readBody(const boost::system::error_code& error) {
-		socket_.async_read_some(boost::asio::buffer((unsigned char *)this->_inputMessage->getBody(), this->_inputMessage->getBodyLength()),
-			boost::bind(&client::readBodyHandler, this,
-			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred));
-	}
+void Client::sendLogout() {
+	Message *message = headerMessage(VSP::LOGOUT);
 
-	void readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred) {
-		//TODO: do job on the message
+	MessageLogOut *customMessage = new MessageLogOut(*message);
+	customMessage->encodeBody();
+	customMessage->encodeData();
+	sendMessage(*customMessage);
+}
 
-		std::cout << "{HEADER} bytes_transferred : " << bytes_transferred << std::endl;
-		this->_inputMessage->decodeHeader();
-		//TODO: if bad header -> 	readheader(error); and clean the Message
+void Client::sendRecognizePlate(std::string filePath, std::string codeFile) {
+	std::string codePlate = "";//INFO: plate value
+	std::string name = "";
 
-		readBody(error);
-	}
+	Message *answerMessage = this->headerMessage(VSP::PLATE);
+	answerMessage->decodeHeader();
+	MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(), (char*)name.c_str(), (char*)codeFile.c_str(), VSP::RECORDED);
+	customMessage->encodeBody();
+	customMessage->encodeData();
+	customMessage->debug();
 
-	void readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred) {
-		std::cout << "{BODY} bytes_transferred : " << bytes_transferred << std::endl;
-		this->_protocol->receiveMessage(*this->_inputMessage);
-		//delete _inputMessage;
-		read(error);
-	}
-	void handle_read(const boost::system::error_code& ec)
-	{
-		if (stopped_)
-			return;
+	sendMessage(*customMessage);
+	sendFile(filePath, codeFile);
+}
 
-		if (!ec)
-		{
-			// Extract the newline-delimited message from the buffer.
-			std::string line;
-			std::istream is(&input_buffer_);
-			std::getline(is, line);
+void Client::sendFile(std::string filePath, std::string codeFile) {
+	std::string buffer = FileTools::readStringFromFile(filePath.c_str());
 
-			// Empty messages are heartbeats and so ignored.
-			if (!line.empty())
-			{
-				std::cout << "Received: " << line << "\n";
-			}
+	if (buffer.length() == 0)
+		return;
 
-			start_read();
-		}
-		else
-		{
-			std::cout << "Error on receive: " << ec.message() << "\n";
+	Tools::Range rangeToRead;
 
-			stop();
-		}
-	}
+	size_t dataFileLength = buffer.length();
+	size_t nbMessage = (dataFileLength / VSP::FILE_SIZE < 1) ? 1 : dataFileLength / VSP::FILE_SIZE;
+	size_t dataWritten = 0;
+	char dataToSend[VSP::FILE_SIZE];
 
-	void sendMessage(Message &msg)
-	{
-		boost::asio::async_write(socket_, 
-			boost::asio::buffer((unsigned char *)msg.getData(), msg.getDataLength()),
-			boost::bind(&client::handle_write, this, _1));
-	}
-	void sendMessageQueue(std::queue<Message*> msgQueue)
-	{
-		while (!msgQueue.empty())
-		{
-			sendMessage(*msgQueue.front());
-			msgQueue.pop();
-		}
-	}
-	void sendLogin(std::string username, std::string password)
-	{
-		Message *message = new Message;
-		message->encodeHeader(VSP::LOGIN);
-		message->decodeHeader();
+	for (unsigned int i = 0; i <= nbMessage; i++) {
+		rangeToRead.location = dataWritten;
+		rangeToRead.length = (dataWritten + VSP::FILE_SIZE > dataFileLength) ? dataFileLength - dataWritten : VSP::FILE_SIZE;
+		std::memset(dataToSend, '\0', VSP::FILE_SIZE);
+		std::memcpy(dataToSend, buffer.c_str() + rangeToRead.location, rangeToRead.length);
+		Message *message = headerMessage(VSP::FILE);
 
-		MessageLogin *customMessage = new MessageLogin(*message,  (char*)username.c_str(), (char*)password.c_str());
+		MessageFile *customMessage = new MessageFile(*message, 'a', i, nbMessage, (char*)codeFile.c_str(), rangeToRead.length, dataToSend);
 		customMessage->encodeBody();
 		customMessage->encodeData();
 		sendMessage(*customMessage);
+
+		dataWritten += rangeToRead.length;
 	}
-	void sendLogout()
-	{
-		Message *message = new Message;
-		message->encodeHeader(VSP::LOGOUT);
-		message->decodeHeader();
+	std::cout << "FileTools::file send" << std::endl;
+}
 
-		MessageLogOut *customMessage = new MessageLogOut(*message);
-		customMessage->encodeBody();
-		customMessage->encodeData();
-		sendMessage(*customMessage);
+void Client::sendFile(FileAnnotation fileAnnotation) {
+	sendFile(fileAnnotation._filePath, fileAnnotation._codeFile);
+}
+
+void Client::handle_write(const boost::system::error_code& ec) {
+	if (this->_stopped)
+		return;
+	if (!ec) {
+		//INFO: Wait 10 seconds before sending the next heartbeat.
+		this->_heartbeat_timer.expires_from_now(boost::posix_time::seconds(10));
+		//this->_heartbeat_timer.async_wait(boost::bind(&Client::start_write, this));
 	}
-
-	void sendFile(std::string filename) {
-		std::string buffer = FileTools::readStringFromFile(filename.c_str());
-		std::list<std::string> bufferVerif;
-
-		if (buffer.length() == 0)
-			return;
-
-		Tools::Range rangeToRead;
-
-		size_t dataFileLength = buffer.length();
-		size_t nbMessage = (dataFileLength / VSP::FILE_SIZE < 1) ? 1 : dataFileLength / VSP::FILE_SIZE;
-		size_t dataWritten = 0;
-		char dataToSend[VSP::FILE_SIZE];
-
-
-		for (int i = 0; i <= nbMessage; i++) {
-			rangeToRead.location = dataWritten;
-			rangeToRead.length = (dataWritten + VSP::FILE_SIZE > dataFileLength) ? dataFileLength - dataWritten : VSP::FILE_SIZE;
-			std::memset(dataToSend, '\0', VSP::FILE_SIZE);
-			std::memcpy(dataToSend, buffer.c_str() + rangeToRead.location, rangeToRead.length);
-			Message *message = new Message;
-
-			message->encodeHeader(VSP::FILE);
-			message->decodeHeader();
-
-			MessageFile *customMessage = new MessageFile(*message, 'c', i, nbMessage, (char*)filename.c_str(), rangeToRead.length, dataToSend );
-			customMessage->encodeBody();
-			customMessage->encodeData();
-			sendMessage(*customMessage);
-
-			std::string data(dataToSend, rangeToRead.length);
-			bufferVerif.push_back(data);
-			dataWritten += rangeToRead.length;
-		}
-		std::string b;
-		while (!bufferVerif.empty())
-		{
-			b += bufferVerif.front();
-			bufferVerif.pop_front();
-		}
-		if (FileTools::writeStringToFile(b, "verifUpload.jpg"))
-			std::cout << "FileTools::writeStringToFile: SUCESS" << std::endl;
-		else
-			std::cout << "FileTools::writeStringToFile: FAILED" << std::endl;
-
+	else {
+		std::cout << "Error on heartbeat: " << ec.message() << std::endl;
+		disconnect();
 	}
+}
 
+void Client::check_deadline() {
+	if (this->_stopped)
+		return;
 
-	void start_write()
-	{
-		/*boost::asio::async_write(socket_, 
-		boost::asio::buffer((unsigned char *)customMessage->getData(), customMessage->getDataLength()),
-		boost::bind(&client::handle_write, this, _1));*/
-		//socket_.close();
-
+	if (this->_deadline.expires_at() <= deadline_timer::traits_type::now()) {
+		this->_socket.close();
+		this->_deadline.expires_at(boost::posix_time::pos_infin);
 	}
+	this->_deadline.async_wait(boost::bind(&Client::check_deadline, this));
+}
 
-	void handle_write(const boost::system::error_code& ec)
-	{
-		if (stopped_)
-			return;
+/* CALLBACK FOR IPROTOCOL */
 
-		if (!ec)
-		{
-			// Wait 10 seconds before sending the next heartbeat.
-			heartbeat_timer_.expires_from_now(boost::posix_time::seconds(10));
-			heartbeat_timer_.async_wait(boost::bind(&client::start_write, this));
-		}
-		else
-		{
-			std::cout << "Error on heartbeat: " << ec.message() << "\n";
+bool Client::loginHandler(MessageLogin &message)  {
+	//INFO: never call
+	return true;
+}
 
-			stop();
+bool Client::loginResultHandler(MessageLoginResult &message)  {
+	//TODO: call delegate to notify the result login  [OK]
+	std::cout << "Client::loginResultHandler: " << ((message._loginResult.state == VSP::OK) ? "SUCCESS" : "FAILED") << std::endl;// none
+
+	bool result = (message._loginResult.state == VSP::OK) ? true : false;
+	this->_isLogin = result;
+	if (this->_delegate) {
+		this->_delegate->loginResultHandler(result);
+	}
+	return true;
+}
+
+bool Client::logOutHandler(MessageLogOut &message) {
+	if (this->_delegate) {
+		this->_delegate->logOutHandler();
+	}
+	return true;
+}
+
+bool Client::plateHandler(MessagePlate &message)  {
+	//TODO: notify the GUI that a plate was treated [OK]
+	if (message._plate.state == VSP::LIVE) {
+		if (this->_delegate) {
+			this->_delegate->plateLiveHandler(message._plate.code_file);
 		}
 	}
-
-	void check_deadline()
-	{
-		if (stopped_)
-			return;
-
-		// Check whether the deadline has passed. We compare the deadline against
-		// the current time since a new asynchronous operation may have moved the
-		// deadline before this actor had a chance to run.
-		if (deadline_.expires_at() <= deadline_timer::traits_type::now())
-		{
-			// The deadline has passed. The socket is closed so that any outstanding
-			// asynchronous operations are cancelled.
-			socket_.close();
-
-			// There is no longer an active deadline. The expiry is set to positive
-			// infinity so that the actor takes no action until a new deadline is set.
-			deadline_.expires_at(boost::posix_time::pos_infin);
+	else if (message._plate.state == VSP::RECORDED) {
+		//TODO: add the plate result to the GUI"  plate list
+		if (this->_delegate) {
+			//INFO: if db add plate result to db
+			this->_delegate->plateRecordedHandler(message._plate.code_file);
 		}
-
-		// Put the actor back to sleep.
-		deadline_.async_wait(boost::bind(&client::check_deadline, this));
 	}
+	return true;
+}
 
-	void loginHandler(MessageLogin &message) 
-	{
+bool Client::fileHandler(MessageFile &message) {
+	std::string b(message._file.file, message._file.to_read);
 
-	}
-
-	void loginResultHandler(MessageLoginResult &message) 
-	{
-		std::cout << "OK" << std::endl;// none
-	}
-
-	void logOutHandler(MessageLogOut &message) 
-	{
-		// kill client
-	}
-
-	void plateHandler(MessagePlate &message) 
-	{
-		//none
-	}
-
-	void fileHandler(MessageFile &message) 
-	{
-		/*std::string b(message._file.file, message._file.to_read);
-
-		this->_fileBuffers.push_back(b);
-		if (message._file.indx == message._file.max_indx) {
-			std::string imageBuffer;
-
-			while (!_fileBuffers.empty())
-			{
-				imageBuffer += _fileBuffers.front();
-				_fileBuffers.pop_front();
-			}
-
-			bool ret = FileTools::writeStringToFile(imageBuffer, "serverVerifUpload.jpg");
-			if (!ret) {
-				std::cout << "FAILED: " << "Writting file on path: " << message._file.code_file << std::endl;
-			}
+	this->_fileBuffer += b;
+	if (message._file.indx == message._file.max_indx) {
+		std::string filePath = "";//AppData::getInstance()._appDirectory;
+		filePath  += message._file.code_file;
+		std::cout << "Writting file on path: " << filePath << std::endl;
+		bool ret = FileTools::writeStringToFile(this->_fileBuffer, filePath);
+		if (!ret) {
+			std::cout << "FAILED: " << "Writting file on path: " << filePath << std::endl;
 		}
-		message.clean();*/
+		else {
+			std::cout << "SUCCESS: " << "Writting file on path: " << filePath << std::endl;
+		}
+		this->_fileBuffer = "";
+		if (this->_delegate) {//INFO: notify the delegate that a file was received
+			this->_delegate->fileHandler(message._file.code_file);
+		}
 	}
+	message.clean();
+	return true;
+}
 
-	void unknowMessageHandler(Message &message) {
-
+bool Client::unknowMessageHandler(Message &message) {
+	if (this->_delegate) {
+		return this->_delegate->unknowMessageHandler();
 	}
+	//INFO: do additional stuff if needed
+	return true;
+}
 
-	/* Message */
+/* Message */
 
-	Message *headerMessage(char bodyType) {
-		Message *message = new Message();
-		message->encodeHeader(bodyType);
-		message->decodeHeader();
-		return message;
-	}
-private:
-	bool stopped_;
-	tcp::socket socket_;
-	boost::asio::streambuf input_buffer_;
-	deadline_timer deadline_;
-	deadline_timer heartbeat_timer_;
-};
+Message *Client::headerMessage(char bodyType) {
+	Message *message = new Message();
+	message->encodeHeader(bodyType);
+	message->decodeHeader();
+	return message;
+}
 
+/* IProtocolDelegate */
 
-int main(int argc, char* argv[])
-{
-	try
-	{
-		boost::asio::io_service io_service;
-		tcp::resolver r(io_service);
-		client c(io_service);
-
-		c.start(r.resolve(tcp::resolver::query("127.0.0.1", "4242")));
-
-		io_service.run();
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << "Exception: " << e.what() << "\n";
-	}
-
-	return 0;
+void Client::setDelegate(IClientDelegate *delegate) {
+	this->_delegate = delegate;
 }

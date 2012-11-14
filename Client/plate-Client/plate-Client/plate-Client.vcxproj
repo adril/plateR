@@ -46,7 +46,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital3\plateR\Common\Tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital3\plateR\Common\Tools;Z:\Desktop\dev\trainning-china\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -67,9 +67,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Common\Annotation\FileAnnotation.cpp" />
+    <ClCompile Include="..\..\..\Common\Annotation\PlateAnnotation.cpp" />
     <ClCompile Include="..\..\..\Common\Tools\FileTools.cpp" />
     <ClCompile Include="..\..\..\Common\Tools\Tools.cpp" />
+    <ClCompile Include="AppData.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\Desktop\Digital\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" />
@@ -78,8 +82,13 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Common\Annotation\FileAnnotation.h" />
+    <ClInclude Include="..\..\..\Common\Annotation\PlateAnnotation.h" />
     <ClInclude Include="..\..\..\Common\Tools\FileTools.hpp" />
     <ClInclude Include="..\..\..\Common\Tools\Tools.hpp" />
+    <ClInclude Include="AppData.hpp" />
+    <ClInclude Include="Client.hpp" />
+    <ClInclude Include="IClientDelegate.hh" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

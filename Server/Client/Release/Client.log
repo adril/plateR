@@ -1,19 +1,9 @@
-﻿Build started 11/13/2012 5:06:40 PM.
-     1>Project "C:\Users\JD\Desktop\Digital3\plateR\Server\Client\Client.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /IC:\Users\JD\Desktop\Digital3\plateR\Server\Client\..\..\Common\LProtocol\include /I"Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0" /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /IC:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include /IC:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0 /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D _MBCS /D _MBCS /D _WIN32_WINNT=0x0501 /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Common\Tools\FileTools.cpp ..\..\Common\Tools\Tools.cpp AppData.cpp Client.cpp main.cpp Server.cpp
-         FileTools.cpp
-     1>..\..\Common\Tools\FileTools.cpp(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\include\stdio.h(218) : see declaration of 'fopen'
-         Tools.cpp
-         AppData.cpp
-         Client.cpp
-     1>Client.cpp(6): fatal error C1083: Cannot open include file: 'FileTools.hpp': No such file or directory
-         main.cpp
-         Server.cpp
-     1>Server.cpp(12): warning C4244: 'argument' : conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>Done Building Project "C:\Users\JD\Desktop\Digital3\plateR\Server\Client\Client.vcxproj" (Build target(s)) -- FAILED.
+﻿Build started 14-Nov-12 6:34:47 AM.
+     1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Clean target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\Server.lastbuildstate".
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Clean target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:11.14
+Time Elapsed 00:00:04.01

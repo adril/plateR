@@ -4,12 +4,13 @@
 #include <stdint.h>
 
 //TODO: ad:
-//			- DB Class
-//			- Image Class
+//			-Misc tools
 
 class AppData {
 public:
 	public:
+		std::string _port;
+		std::string _host;
 		std::string _appDirectory;
 	  public:
         static AppData& getInstance() {

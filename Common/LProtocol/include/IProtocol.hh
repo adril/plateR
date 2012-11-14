@@ -4,19 +4,21 @@
 #include <deque>
 #include "Message.hh"
 
+
 class IProtocol {
 public:
-	virtual void receiveMessage(Message &message) = 0;
+	//INFO: return value define if we can continue to read after the receiveMessage
+	virtual bool receiveMessage(Message &message) = 0;
 
 protected:
 	/* Misc func */
 
-	virtual void loginHandler(Message &message) = 0;
-	virtual void loginResultHandler(Message &message) = 0;
-	virtual void logOutHandler(Message &message) = 0;
-	virtual void plateHandler(Message &message) = 0;
-	virtual void fileHandler(Message &message) = 0;
-	virtual void unknowMessageHandler(Message &message) = 0;
+	virtual bool loginHandler(Message &message) = 0;
+	virtual bool loginResultHandler(Message &message) = 0;
+	virtual bool logOutHandler(Message &message) = 0;
+	virtual bool plateHandler(Message &message) = 0;
+	virtual bool fileHandler(Message &message) = 0;
+	virtual bool unknowMessageHandler(Message &message) = 0;
 
 public:
 	virtual void debug() = 0;

@@ -7,8 +7,7 @@
 
 Server::Server() : 
 	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), VSP::PORT)),
-	_timer(_io_service)
-{
+	_timer(_io_service) {
 	srand(time(NULL));
 	_isRunning = true;
 	_timer.expires_from_now(boost::posix_time::seconds(1));
@@ -98,4 +97,14 @@ void Server::handleAccept(Client *cl, tcp::error_code error) {
 
 void Server::disconectClient(void *client) {
 	removeClient(reinterpret_cast<Client*>(client));
+}
+
+std::string Server::recognizePlate(void *client, std::string code_file) {
+	//TODO:  do stuff with member or static class
+	return "001.jpg";
+}
+
+std::string Server::getPlateValue(void *client, std::string code_file) {
+	//TODO:  do stuff with member or static class
+	return "0123456";
 }

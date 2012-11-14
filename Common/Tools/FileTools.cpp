@@ -6,13 +6,21 @@ bool FileTools::writeStringToFile(std::string fileContent, std::string filePath)
 	std::ofstream myFile;
 
 	FILE *file = fopen(filePath.c_str(), "wb");
-	if (file)
-	{
+	if (file) {
 		fwrite(fileContent.c_str(), fileContent.length(), 1, file);
 		fclose(file);
 		return true;
 	}
 	return false;
+	//std::ofstream myFile;
+
+	//myFile.open(filePath, std::ios::out | std::ios::app | std::ios::binary);
+	//if (myFile.is_open()) {
+	//	myFile << fileContent.c_str();
+	//	myFile.close();
+	//	return true;
+	//}
+	//return false;
 }
 
 std::string FileTools::readStringFromFile(std::string filePath)

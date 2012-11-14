@@ -4,7 +4,7 @@
 #define IS_IN_RANGE(X, Y, Z) (X >= Y ? (X <= Z ? true : false) : false)
 
 namespace VSP {
-  const size_t PORT = 4242;
+  const size_t PORT = 4243;
   const size_t LOGIN_SIZE = 25;
   const size_t PASSWORD_SIZE = 25;
   const size_t NAME_SIZE = 25;

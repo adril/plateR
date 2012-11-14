@@ -1,42 +1,9 @@
-﻿Build started 11/13/2012 5:06:35 PM.
-     1>Project "C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /IC:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\Windows\libProtocol\..\..\..\Common\LProtocol\include /IC:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D LIBPROTOCOL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Unix\srcs\LProtocol.cpp ..\..\Unix\srcs\Message.cpp ..\..\Unix\srcs\MessageFile.cpp ..\..\Unix\srcs\MessageLogin.cpp ..\..\Unix\srcs\MessageLoginResult.cpp ..\..\Unix\srcs\MessageLogOut.cpp ..\..\Unix\srcs\MessagePlate.cpp
-         LProtocol.cpp
-         Message.cpp
-     1>..\..\Unix\srcs\Message.cpp(125): error C2039: 'isValidHeader' : is not a member of 'Message'
-                 C:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include\Message.hh(18) : see declaration of 'Message'
-     1>..\..\Unix\srcs\Message.cpp(126): error C3861: 'IS_IN_RANGE': identifier not found
-     1>..\..\Unix\srcs\Message.cpp(126): error C3861: 'getType': identifier not found
-         MessageFile.cpp
-     1>..\..\Unix\srcs\MessageFile.cpp(9): error C2039: 'code_file' : is not a member of 'VSP::File'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(71) : see declaration of 'VSP::File'
-     1>..\..\Unix\srcs\MessageFile.cpp(9): error C2039: 'CODE_FILE_SIZE' : is not a member of 'VSP'
-     1>..\..\Unix\srcs\MessageFile.cpp(9): error C2065: 'CODE_FILE_SIZE' : undeclared identifier
-     1>..\..\Unix\srcs\MessageFile.cpp(36): error C2039: 'code_file' : is not a member of 'VSP::File'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(71) : see declaration of 'VSP::File'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(71) : see declaration of 'VSP::File'
-     1>..\..\Unix\srcs\MessageFile.cpp(36): error C2039: 'CODE_FILE_SIZE' : is not a member of 'VSP'
-     1>..\..\Unix\srcs\MessageFile.cpp(36): error C2065: 'CODE_FILE_SIZE' : undeclared identifier
-     1>..\..\Unix\srcs\MessageFile.cpp(44): error C2039: 'code_file' : is not a member of 'VSP::File'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(71) : see declaration of 'VSP::File'
-         MessageLogin.cpp
-         MessageLoginResult.cpp
-         MessageLogOut.cpp
-         MessagePlate.cpp
-     1>..\..\Unix\srcs\MessagePlate.cpp(9): error C2039: 'code_file' : is not a member of 'VSP::Plate'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(61) : see declaration of 'VSP::Plate'
-     1>..\..\Unix\srcs\MessagePlate.cpp(9): error C2039: 'CODE_FILE_SIZE' : is not a member of 'VSP'
-     1>..\..\Unix\srcs\MessagePlate.cpp(9): error C2065: 'CODE_FILE_SIZE' : undeclared identifier
-     1>..\..\Unix\srcs\MessagePlate.cpp(30): error C2039: 'code_file' : is not a member of 'VSP::Plate'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(61) : see declaration of 'VSP::Plate'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(61) : see declaration of 'VSP::Plate'
-     1>..\..\Unix\srcs\MessagePlate.cpp(30): error C2039: 'CODE_FILE_SIZE' : is not a member of 'VSP'
-     1>..\..\Unix\srcs\MessagePlate.cpp(30): error C2065: 'CODE_FILE_SIZE' : undeclared identifier
-     1>..\..\Unix\srcs\MessagePlate.cpp(38): error C2039: 'code_file' : is not a member of 'VSP::Plate'
-                 c:\users\jd\desktop\digital2\plater\common\lprotocol\include\VSP.h(61) : see declaration of 'VSP::Plate'
-     1>Done Building Project "C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" (Build target(s)) -- FAILED.
+﻿Build started 14-Nov-12 6:34:51 AM.
+     1>Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" on node 2 (Clean target(s)).
+     1>_PrepareForClean:
+         Deleting file "Release\LProtocol.lastbuildstate".
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" (Clean target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:04.72
+Time Elapsed 00:00:03.69

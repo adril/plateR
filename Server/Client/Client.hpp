@@ -12,67 +12,80 @@
 #include "Common.hpp"
 #include "IServerDelegate.hpp"
 #include "VSP.h"
+#include "FileAnnotation.h"
+#include "PlateAnnotation.h"
 
 class Client : public IProtocolDelegate {
 private :
-	tcp::socket	 _socket;
-	LProtocol	*_protocol;
-	Message		*_inputMessage;
+	tcp::socket	_socket;
+	LProtocol *_protocol;
+	Message	*_inputMessage;
 	MessageLogin *_userInfo;
-	double		_timestamp;
+	double	_timestamp;
+
 	IServerDelegate *_delegate;
 
-	std::string				_fileBuffer;
-	std::list<std::string>	_fileBuffers;
-	boost::asio::deadline_timer	_timer;
-	std::list<Message *> _messages;
+	tcp::io_service	_io_service;
+	std::string	_fileBuffer;
 
+	boost::asio::deadline_timer	_getUpdatedTimer;
 
+	std::list<Message *> _sendMessageList;
+	std::list<FileAnnotation> _sendFileList;
+	std::list<PlateAnnotation> _plateToTreatList;
+	bool _isLogin;
 public:
 	Client(tcp::io_service& io_service);
 	~Client();
 
 	void start();
+
+	/* CALLBACK FOR LPROTOCOL */
+	virtual bool loginHandler(MessageLogin &message);
+	virtual bool loginResultHandler(MessageLoginResult &message);
+	virtual bool logOutHandler(MessageLogOut &message);
+	virtual bool plateHandler(MessagePlate &message);
+	virtual bool fileHandler(MessageFile &message);
+	virtual bool unknowMessageHandler(Message &message);
+
+	/* SERVER OUTPUT */
+	void sendRecordedPlate();
+	void sendInfoPlate(std::string codeFile, char state);
+	void sendLogout();
+	void sendFile(std::string filePath);
+
+	/* HANDLER */
+	void getUpdatedHandler(const boost::system::error_code& error);
+
+	/* GETTER */
 	tcp::socket& getSocket();
 	std::string	getIpAsString() const;
+
+	/* Setter */
+	void setDelegate(IServerDelegate *delegate);
+
+	/* Misc */
 	void debug();
 	void displayUserInfo() const;
 
-	//INFO: setter
-	void setDelegate(IServerDelegate *delegate);
-
-	void messageHandler();
-
-	/* CALLBACK FOR LPROTOCOL */
-	virtual void loginHandler(MessageLogin &message);
-	virtual void loginResultHandler(MessageLoginResult &message);
-	virtual void logOutHandler(MessageLogOut &message);
-	virtual void plateHandler(MessagePlate &message);
-	virtual void fileHandler(MessageFile &message);
-	virtual void unknowMessageHandler(Message &message);
-
-	/* SERVER OUTPUT */
-	void sendPlateInfo(std::string);
-	void sendLogout();
 private:
 	void disconect();
 
-	//INFO: new read methodes
+	/* READ */ 
 	void readHeader(const boost::system::error_code& error);
 	void readBody(const boost::system::error_code& error);
 
-	//INFO: new handler read methodes
+	/* READ HANDLER */
 	void readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred);
 	void readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred);
 
+	/* Internal IO functions */
+	void writeFinish(const boost::system::error_code &error, uint8_t *data);
 	bool checkError(const boost::system::error_code& error);
 
-	// Internal IO functions
-	void writeFinish(const boost::system::error_code &error, uint8_t *data);
-
+	/* MESSAGE */
 	void sendMessage(Message &msg);
-	//INFO: Message
 	Message *headerMessage(char bodyType);
 };
 
-#endif
+#endif /* _CLIENT_HPP_ */
