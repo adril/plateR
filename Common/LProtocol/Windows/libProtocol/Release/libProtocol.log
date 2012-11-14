@@ -1,9 +1,33 @@
-﻿Build started 14-Nov-12 6:34:51 AM.
-     1>Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" on node 2 (Clean target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\LProtocol.lastbuildstate".
-     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" (Clean target(s)).
+﻿Build started 14-Nov-12 6:46:55 AM.
+     1>Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" on node 2 (Build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\LProtocol.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include" /I"Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\..\..\..\Common\LProtocol\include" /IC:\Users\JD\Desktop\Digital2\plateR\Common\LProtocol\include /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D LIBPROTOCOL_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Unix\srcs\LProtocol.cpp ..\..\Unix\srcs\Message.cpp ..\..\Unix\srcs\MessageFile.cpp ..\..\Unix\srcs\MessageLogin.cpp ..\..\Unix\srcs\MessageLoginResult.cpp ..\..\Unix\srcs\MessageLogOut.cpp ..\..\Unix\srcs\MessagePlate.cpp
+         LProtocol.cpp
+         Message.cpp
+         MessageFile.cpp
+         MessageLogin.cpp
+         MessageLoginResult.cpp
+         MessageLogOut.cpp
+         MessagePlate.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.lib" /MACHINE:X86 /SAFESEH /DLL Release\LProtocol.obj
+         Release\Message.obj
+         Release\MessageFile.obj
+         Release\MessageLogin.obj
+         Release\MessageLoginResult.obj
+         Release\MessageLogOut.obj
+         Release\MessagePlate.obj
+            Creating library Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.lib and object Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.exp
+         Generating code
+         Finished generating code
+         libProtocol.vcxproj -> Z:\Desktop\dev\trainning-china\plateR\Server\Release\LProtocol.dll
+       FinalizeBuildStatus:
+         Deleting file "Release\LProtocol.unsuccessfulbuild".
+         Touching "Release\LProtocol.lastbuildstate".
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\libProtocol\libProtocol.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.69
+Time Elapsed 00:00:24.10
