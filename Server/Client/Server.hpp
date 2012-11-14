@@ -10,6 +10,8 @@
 #include "Common.hpp"
 #include "Client.hpp"
 #include "IServerDelegate.hpp"
+#include "DB.hpp"
+
 
 class Server : public IServerDelegate
 {

@@ -25,6 +25,7 @@ void Client::disconnect() {
 	this->_socket.close(ignored_ec);
 	this->_deadline.cancel();
 	this->_heartbeat_timer.cancel();
+	this->_getUpdatedTimer.cancel();
 }
 
 void Client::startConnect(tcp::resolver::iterator endpoint_iter) {
@@ -60,15 +61,15 @@ void Client::handleConnect(const boost::system::error_code& ec, tcp::resolver::i
 		this->_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
 
 
-		sendLogin("jullien", "1234567");
+		sendLogin("Julien", "password");
+		sendFile("Smile-3.jpg", "Smile-3.jpg");
+		//sendFile("001.jpg", "001.jpg");
+		//sendFile("002.jpg", "002.jpg");
+		//sendFile("003.jpg", "003.jpg");
+		//sendFile("001.jpg", "001.jpg");
+		//sendFile("002.jpg", "002.jpg");
+		//sendFile("003.jpg", "003.jpg");
 		startRead();
-		//sendFile("Smile-3.jpg", "Smile-3.jpg");
-		//sendFile("001.jpg", "001.jpg");
-		//sendFile("002.jpg", "002.jpg");
-		//sendFile("003.jpg", "003.jpg");
-		//sendFile("001.jpg", "001.jpg");
-		//sendFile("002.jpg", "002.jpg");
-		//sendFile("003.jpg", "003.jpg");
 	}
 }
 

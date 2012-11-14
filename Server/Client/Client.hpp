@@ -14,6 +14,7 @@
 #include "VSP.h"
 #include "FileAnnotation.h"
 #include "PlateAnnotation.h"
+#include "DB.hpp"
 
 class Client : public IProtocolDelegate {
 private :
@@ -33,6 +34,8 @@ private :
 	std::list<Message *> _sendMessageList;
 	std::list<FileAnnotation> _sendFileList;
 	std::list<PlateAnnotation> _plateToTreatList;
+	std::list<DBDATA::File> _fileToTreatList;
+
 	bool _isLogin;
 public:
 	Client(tcp::io_service& io_service);

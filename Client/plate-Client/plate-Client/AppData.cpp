@@ -11,7 +11,7 @@ AppData::AppData() {
 		this->_appDirectory = szPath;//"hello world";
 	}
 	this->_host = "127.0.0.1";
-	this->_port = "4243";
+	this->_port = "4242";
 }
 
 

@@ -46,7 +46,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital3\plateR\Common\Tools;Z:\Desktop\dev\trainning-china\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\JD\Desktop\Digital-final\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-final\plateR\Common\Tools;Z:\Desktop\dev\trainning-china\plateR\Common\Annotation;C:\Users\JD\Desktop\Digital-Final\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
