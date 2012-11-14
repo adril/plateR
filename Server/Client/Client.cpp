@@ -6,22 +6,28 @@
 #include "FileTools.hpp"
 #include "AppData.hpp"
 #include "Tools.hpp"
+#include "DB.hpp"
+#include "StringTools.hpp"
 
 Client::Client(tcp::io_service& io_service) : _socket(io_service), _getUpdatedTimer(io_service) {
 	this->_timestamp = 0.0;
 	this->_protocol = new LProtocol(this);
-	//Message *message = headerMessage(VSP::LOGIN);
 	this->_userInfo = NULL;
 	this->_fileBuffer = "";
 	this->_isLogin = false;
 
 	/* Timer to get Updated */
-	this->_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(1));
+	this->_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(10));
 	this->_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
 
-	this->_sendFileList.push_back(FileAnnotation("004.jpg", "004.jpg"));
-	this->_sendFileList.push_back(FileAnnotation("005.jpg", "005.jpg"));
-
+	//this->_sendFileList.push_back(FileAnnotation("004.jpg", "004.jpg"));
+	//this->_sendFileList.push_back(FileAnnotation("005.jpg", "005.jpg"));
+	for (unsigned int i = 0; i < AppData::getInstance()._appDirectory.length(); i++)
+	{
+		if (AppData::getInstance()._appDirectory[i] == '\\')
+			AppData::getInstance()._appDirectory[i] = '/';
+	}
+	AppData::getInstance()._appDirectory;
 	std::cout << "appDirectory: " << AppData::getInstance()._appDirectory << std::endl;;
 }
 Client::~Client() {
@@ -126,20 +132,27 @@ void Client::sendMessage(Message &message) {
 void Client::sendRecordedPlate() {
 	//TODO: -get plate list from db
 	//		-create a message for it and send it [OK]
-	size_t coutRecordedPlate = 42;
+	std::list<DBDATA::Plate> recordedPlate = DB::get_all_recorded_plate(this->_userInfo->_login.login);
+	size_t coutRecordedPlate = recordedPlate.size();
+
 	std::string codePlate = "plate004";//INFO: plate value
 	std::string name = "Plate recorded test";
 	std::string codeFile = "004.jpg";//INFO: foreign key between a plate and a file
 
-	for (size_t i = 0; i <= coutRecordedPlate; ++i) {
+	for (size_t i = 0; i < coutRecordedPlate; ++i) {
+		DBDATA::Plate plate = recordedPlate.front();
+
 		Message *answerMessage = this->headerMessage(VSP::PLATE);
 		answerMessage->decodeHeader();
-		MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(), (char*)name.c_str(), (char*)codeFile.c_str(), VSP::RECORDED);
+		MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)plate.codePlate.c_str(), (char*)plate.name.c_str(), (char*)plate.codeFile.c_str(), VSP::RECORDED);
 		customMessage->encodeBody();
 		customMessage->encodeData();
 		customMessage->debug();
 
+		std::string basePath = (plate.path);
 		sendMessage(*customMessage);
+		sendFile(basePath + plate.name);
+		recordedPlate.pop_front();
 		//TODO: send the file
 	}
 }
@@ -147,19 +160,19 @@ void Client::sendRecordedPlate() {
 void Client::sendInfoPlate(std::string codeFile, char state) {
 	if (!this->_delegate)
 		return;
-		std::string filePathSmallPlate = this->_delegate->recognizePlate(this, codeFile);
-		std::string plateValue = this->_delegate->getPlateValue(this, codeFile);
-		std::string codePlate = codeFile + "-small";
+	std::string filePathSmallPlate = this->_delegate->recognizePlate(this, codeFile);
+	std::string plateValue = this->_delegate->getPlateValue(this, codeFile);
+	std::string codePlate = codeFile + "-small";
 
-		Message *answerMessage = this->headerMessage(VSP::PLATE);
-		answerMessage->decodeHeader();
-		MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(),
-				(char*)plateValue.c_str(), (char*)codeFile.c_str(), state);
-		customMessage->encodeBody();
-		customMessage->encodeData();
-		customMessage->debug();
+	Message *answerMessage = this->headerMessage(VSP::PLATE);
+	answerMessage->decodeHeader();
+	MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(),
+		(char*)plateValue.c_str(), (char*)codeFile.c_str(), state);
+	customMessage->encodeBody();
+	customMessage->encodeData();
+	customMessage->debug();
 
-		sendMessage(*customMessage);
+	sendMessage(*customMessage);
 
 }
 
@@ -172,6 +185,43 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 		return;
 
 	if (this->_isLogin == true) {
+
+		_fileToTreatList = DB::get_file_to_treat(this->_userInfo->_login.login);
+		// look the BDD for untreated picture (image reco)
+		std::cout << "getUpdatedHandler: fileTreatList : " << _fileToTreatList.size() << std::endl;
+		while (!this->_fileToTreatList.empty()) {
+			DBDATA::File file = this->_fileToTreatList.front();
+			std::string codePlate("testa");
+
+			file.state = 1;
+			DB::update_file(file);
+			//ret = reco.treatement(file.path + file.name, file.path + file.name + "-plate");
+
+			std::string buff = FileTools::readStringFromFile(file.path + file.name);
+			FileTools::writeStringToFile(buff, file.path + "plate-" + file.name);
+
+			if (codePlate != "") {
+				file.state = 2;
+				DB::add_plate(DBDATA::Plate(codePlate,  "plate-" + file.name, file.name, file.path, this->_userInfo->_login.login, 1));
+				DB::update_file(file);
+				sendFile(file.path + "plate-" + file.name);
+
+				Message *answerMessage = this->headerMessage(VSP::PLATE);
+				answerMessage->decodeHeader();
+				MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(),
+					(char*)file.name.c_str(), (char*)file.name.c_str(), VSP::LIVE);
+				customMessage->encodeBody();
+				customMessage->encodeData();
+				customMessage->debug();
+				sendMessage(*customMessage);
+			}
+			else {
+				file.state = 0;
+				DB::update_file(file);
+			}
+			this->_fileToTreatList.pop_front();
+		}
+		// look the BDD for untreated plate  (not send to the client)
 
 		//INFO: Plate to treat
 		std::cout << "getUpdatedHandler:" << _plateToTreatList.size() << std::endl;
@@ -209,9 +259,11 @@ bool Client::loginHandler(MessageLogin &message) {
 	char result;
 
 	Message *answerMessage = this->headerMessage(VSP::LOGIN_RESULT);
-	//TODO: check if user and password in DB are OK and
-	//		if client is not already connected
-	result = VSP::OK;
+	DBDATA::User	*currentUser = DB::get_user_by_login(message._login.login);
+
+	result = VSP::KO;
+	if (currentUser && currentUser->authUser(message._login.password))
+		result = VSP::OK;
 
 	MessageLoginResult *customMessage = new MessageLoginResult(*answerMessage, VSP::LOGIN_RESULT, result);
 	customMessage->encodeBody();
@@ -269,15 +321,16 @@ bool Client::fileHandler(MessageFile &message) {
 
 	this->_fileBuffer += b;
 	if (message._file.indx == message._file.max_indx) {
-		std::string filePath = "";//AppData::getInstance()._appDirectory;
-		filePath  += message._file.code_file;
-		std::cout << "Writting file on path: " << filePath << std::endl;
-		bool ret = FileTools::writeStringToFile(this->_fileBuffer, filePath);
+		std::string filePath = AppData::getInstance()._appDirectory + "/to_analyze/";
+		std::cout << "Writting file on path: " << filePath + message._file.code_file << std::endl;
+		bool ret = FileTools::writeStringToFile(this->_fileBuffer, filePath + message._file.code_file);
 		if (!ret) {
-			std::cout << "FAILED: " << "Writting file on path: " << filePath << std::endl;
+			std::cout << "FAILED: " << "Writting file on path: " << filePath  << message._file.code_file << std::endl;
 		}
 		else {
-			std::cout << "SUCCESS: " << "Writting file on path: " << filePath << std::endl;
+			// ADD File information on the database for treatement
+			DB::add_file(DBDATA::File(message._file.code_file, filePath, this->_userInfo->_login.login, 0));
+			std::cout << "SUCCESS: " << "Writting file on path: " << filePath << message._file.code_file << std::endl;
 		}
 		this->_fileBuffer = "";
 	}

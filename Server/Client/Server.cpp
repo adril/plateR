@@ -6,7 +6,7 @@
 #include "AppData.hpp"
 
 Server::Server() : 
-	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), VSP::PORT)),
+	_acceptor(_io_service, tcp::endpoint(boost::asio::ip::tcp::v4(), DEFAULT_PORT)),
 	_timer(_io_service) {
 	srand(time(NULL));
 	_isRunning = true;
@@ -14,9 +14,18 @@ Server::Server() :
 	_timer.async_wait(boost::bind(&Server::areClientsAlive, this));
 	
 	// Init DataBase
-	std::string dbDirectory = AppData::getInstance()._appDirectory + "dataBase.db";
-	//AppData::getInstance()._dataBaseConnector = new DataBaseConnectorWithDatabasePath(dbDirectory);
-	//AppData::getInstance()._dataBaseConnector.openDatabase();
+	std::string dbDirectory =  AppData::getInstance()._appDirectory + "dataBase.db";
+	try {
+		AppData::getInstance()._SQLdriver = get_driver_instance();
+		AppData::getInstance()._dataBaseConnector = AppData::getInstance()._SQLdriver->connect(HOST, USER, PASS);
+		AppData::getInstance()._dataBaseConnector->setSchema(DBNAME);
+		std::cout << "Connection to the db server success..." << std::endl;
+		std::cout << "Connection to the db success..." << std::endl;
+	} 
+	catch (sql::SQLException	*e) {
+		std::cerr << "Connection failed..." << std::endl;
+		std::cerr << e->what() << std::endl;
+	}
 	
 	// Init Config Manager
 	//AppData::getInstance()._configManager.initWithDataBase(AppData::getInstance()._dataBaseConnector);
