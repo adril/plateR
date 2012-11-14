@@ -1,9 +1,17 @@
-﻿Build started 14-Nov-12 6:34:47 AM.
-     1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Clean target(s)).
-     1>_PrepareForClean:
-         Deleting file "Release\Server.lastbuildstate".
-     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Clean target(s)).
+﻿Build started 14-Nov-12 6:54:08 AM.
+     1>Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" on node 2 (Build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\Server.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         Client.vcxproj -> Z:\Desktop\dev\trainning-china\plateR\Server\Release\Server.exe
+       FinalizeBuildStatus:
+         Deleting file "Release\Server.unsuccessfulbuild".
+         Touching "Release\Server.lastbuildstate".
+     1>Done Building Project "Z:\Desktop\dev\trainning-china\plateR\Server\Client\Client.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.01
+Time Elapsed 00:00:01.43
