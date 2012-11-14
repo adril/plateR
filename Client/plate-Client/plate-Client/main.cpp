@@ -1,6 +1,7 @@
 #include "Client.hpp"
 #include "AppData.hpp"
 
+/*
 int main(int argc, char* argv[]) {
 	try {
 		boost::asio::io_service io_service;
@@ -17,4 +18,4 @@ int main(int argc, char* argv[]) {
 		std::cerr << "Exception: " << e.what() << "\n";
 	}
 	return 0;
-}
+}*/
