@@ -40,7 +40,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\Digital3\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;$(IncludePath)</IncludePath>
+    <IncludePath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\Digital-final\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;$(IncludePath)</IncludePath>
     <LibraryPath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Debug;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>-D_WIN32_WINNT=0x0501 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital3\plateR\Common\Tools;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-final\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-Final\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -87,7 +87,6 @@
     <ClInclude Include="AppData.hpp" />
     <ClInclude Include="Client.hpp" />
     <ClInclude Include="Common.hpp" />
-    <ClInclude Include="FileAnnotation.h" />
     <ClInclude Include="IServerDelegate.hpp" />
     <ClInclude Include="PlateAnnotation.h" />
     <ClInclude Include="Server.hpp" />

@@ -39,9 +39,6 @@
     <ClInclude Include="..\..\Common\Tools\StringTools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileAnnotation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlateAnnotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
