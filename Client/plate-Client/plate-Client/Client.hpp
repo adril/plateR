@@ -21,6 +21,7 @@
 #include "LProtocol.hh"
 #include "VSP.h"
 
+#include "AppData.hpp"
 #include "Tools.hpp"
 #include "FileTools.hpp"
 #include "IClientDelegate.hh"
@@ -31,7 +32,6 @@ using boost::asio::ip::tcp;
 
 class Client : public IProtocolDelegate {
 private:
-	bool _stopped;
 	bool _isLogin;
 	tcp::socket _socket;
 	boost::asio::streambuf _input_buffer;
@@ -39,6 +39,7 @@ private:
 	deadline_timer _deadline;
 	deadline_timer _heartbeat_timer;
 	deadline_timer	_getUpdatedTimer;
+	size_t _getUpdatedInterval;
 	std::list<FileAnnotation> _sendFileList;;
 	IClientDelegate *_delegate;
 
@@ -51,7 +52,22 @@ public:
 
 	void start(tcp::resolver::iterator endpoint_iter);
 	void disconnect();
-	private:
+
+	/* set delegate Pointer to be nottified */
+	void setDelegate(IClientDelegate *delegate);
+
+		/* SEND */
+
+	void sendMessage(Message &msg);
+	void sendMessageQueue(std::queue<Message*> msgQueue);
+	void sendLogin(std::string username, std::string password);
+	void sendLogout();
+	void sendRecognizePlate(std::string filePath, std::string codeFile, std::string codePlate);//INFO: recognize a plate
+	void sendFile(std::string filePath, std::string codeFile);
+	void sendFile(FileAnnotation fileAnnotation);
+
+
+private:
 	void startConnect(tcp::resolver::iterator endpoint_iter);
 	void handleConnect(const boost::system::error_code& ec, tcp::resolver::iterator endpoint_iter);
 	void startRead();
@@ -65,18 +81,9 @@ public:
 	void readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred);
 	void readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred);
 
-	/* SEND */
-
-	void sendMessage(Message &msg);
-	void sendMessageQueue(std::queue<Message*> msgQueue);
-	void sendLogin(std::string username, std::string password);
-	void sendLogout();
-	void sendRecognizePlate(std::string filePath, std::string codeFile);//INFO: recognize a plate
-	void sendFile(std::string filePath, std::string codeFile);
-	void sendFile(FileAnnotation fileAnnotation);
 
 	void handle_write(const boost::system::error_code& ec);
-	void check_deadline();
+	void check_deadline(const boost::system::error_code& error);
 
 	/* HANDLER */
 	void getUpdatedHandler(const boost::system::error_code& error);
@@ -89,8 +96,6 @@ public:
 	virtual bool unknowMessageHandler(Message &message);
 	Message *headerMessage(char bodyType);
 
-	/* set delegate Pointer to be nottified */
-	void setDelegate(IClientDelegate *delegate);
 };
 
 #endif

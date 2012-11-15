@@ -11,12 +11,14 @@ public:
 	public:
 		std::string _port;
 		std::string _host;
-		std::string _appDirectory;
+		std::string	_appDirectoryPath;
+		std::string	_fileDirectory;
 	  public:
         static AppData& getInstance() {
             static AppData    instance;
             return instance;
         }
+		std::string getFileDirectoryPath();
     private:
         AppData();
         AppData(AppData const&);

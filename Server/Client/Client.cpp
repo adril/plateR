@@ -15,20 +15,13 @@ Client::Client(tcp::io_service& io_service) : _socket(io_service), _getUpdatedTi
 	this->_userInfo = NULL;
 	this->_fileBuffer = "";
 	this->_isLogin = false;
+	this->_getUpdatedInterval = 20;
 
 	/* Timer to get Updated */
-	this->_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(10));
+	this->_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(this->_getUpdatedInterval));
 	this->_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
 
-	//this->_sendFileList.push_back(FileAnnotation("004.jpg", "004.jpg"));
-	//this->_sendFileList.push_back(FileAnnotation("005.jpg", "005.jpg"));
-	for (unsigned int i = 0; i < AppData::getInstance()._appDirectory.length(); i++)
-	{
-		if (AppData::getInstance()._appDirectory[i] == '\\')
-			AppData::getInstance()._appDirectory[i] = '/';
-	}
-	AppData::getInstance()._appDirectory;
-	std::cout << "appDirectory: " << AppData::getInstance()._appDirectory << std::endl;;
+	std::cout << ".getFileDirectoryPath: " << AppData::getInstance().getFileDirectoryPath() << std::endl;;
 }
 Client::~Client() {
 	boost::system::error_code err;
@@ -66,10 +59,9 @@ void Client::readBody(const boost::system::error_code& error) {
 }
 
 void Client::readHeaderHandler(const boost::system::error_code& error, size_t bytes_transferred) {
-	//TODO: do job on the message
-	if (checkError(error)) {
+	if (checkError(error))
 		return;
-	}
+
 	std::cout << "Client::readHeaderHandler: " << "number bit available: "<< this->_socket.available() << std::endl;
 
 	this->_inputMessage->decodeHeader();
@@ -87,10 +79,8 @@ void Client::readHeaderHandler(const boost::system::error_code& error, size_t by
 		std::cout << "-------------Client::readHeaderHandler -> size Message [" << this->_inputMessage->getBodyLength() << "] != bytes_transferred ["  << bytes_transferred << "]-------------" << std::endl;
 		disconect();
 		return;
-
 	}
 	readBody(error);
-	//readHeader(error);
 }
 
 void Client::readBodyHandler(const boost::system::error_code& error, size_t bytes_transferred) {
@@ -130,14 +120,10 @@ void Client::sendMessage(Message &message) {
 }
 
 void Client::sendRecordedPlate() {
-	//TODO: -get plate list from db
+	//TODO: -get plate list from db [OK]
 	//		-create a message for it and send it [OK]
 	std::list<DBDATA::Plate> recordedPlate = DB::get_all_recorded_plate(this->_userInfo->_login.login);
 	size_t coutRecordedPlate = recordedPlate.size();
-
-	std::string codePlate = "plate004";//INFO: plate value
-	std::string name = "Plate recorded test";
-	std::string codeFile = "004.jpg";//INFO: foreign key between a plate and a file
 
 	for (size_t i = 0; i < coutRecordedPlate; ++i) {
 		DBDATA::Plate plate = recordedPlate.front();
@@ -151,9 +137,8 @@ void Client::sendRecordedPlate() {
 
 		std::string basePath = (plate.path);
 		sendMessage(*customMessage);
-		sendFile(basePath + plate.name);
+		sendFile(basePath + plate.name, plate.codeFile);//WARNING
 		recordedPlate.pop_front();
-		//TODO: send the file
 	}
 }
 
@@ -162,18 +147,17 @@ void Client::sendInfoPlate(std::string codeFile, char state) {
 		return;
 	std::string filePathSmallPlate = this->_delegate->recognizePlate(this, codeFile);
 	std::string plateValue = this->_delegate->getPlateValue(this, codeFile);
-	std::string codePlate = codeFile + "-small";
+	std::string codePlate = codeFile + "-small";//WARNING
 
 	Message *answerMessage = this->headerMessage(VSP::PLATE);
 	answerMessage->decodeHeader();
 	MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(),
-		(char*)plateValue.c_str(), (char*)codeFile.c_str(), state);
+				(char*)plateValue.c_str(), (char*)codeFile.c_str(), state);//WARNING
 	customMessage->encodeBody();
 	customMessage->encodeData();
 	customMessage->debug();
 
 	sendMessage(*customMessage);
-
 }
 
 /* GET UPDATED */
@@ -191,9 +175,9 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 		std::cout << "getUpdatedHandler: fileTreatList : " << _fileToTreatList.size() << std::endl;
 		while (!this->_fileToTreatList.empty()) {
 			DBDATA::File file = this->_fileToTreatList.front();
-			std::string codePlate("testa");
+			std::string codePlate("codePlate");
 
-			file.state = 1;
+			file.state = 1;//WARNING
 			DB::update_file(file);
 			//ret = reco.treatement(file.path + file.name, file.path + file.name + "-plate");
 
@@ -202,18 +186,20 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 
 			if (codePlate != "") {
 				file.state = 2;
-				DB::add_plate(DBDATA::Plate(codePlate,  "plate-" + file.name, file.name, file.path, this->_userInfo->_login.login, 1));
+				DB::add_plate(DBDATA::Plate(codePlate,  "plate-" + file.name, file.codeFile, file.path, this->_userInfo->_login.login, 1));
 				DB::update_file(file);
-				sendFile(file.path + "plate-" + file.name);
-
+				sendFile(file.path + "plate-" + file.name, file.codeFile);
+				sendInfoPlate(codePlate, VSP::LIVE);
+				/*
 				Message *answerMessage = this->headerMessage(VSP::PLATE);
 				answerMessage->decodeHeader();
 				MessagePlate *customMessage = new MessagePlate(*answerMessage, 'a', (char*)codePlate.c_str(),
-					(char*)file.name.c_str(), (char*)file.name.c_str(), VSP::LIVE);
+					(char*)file.name.c_str(), (char*)file.name.c_str(), VSP::RECORDED);//WARNING
 				customMessage->encodeBody();
 				customMessage->encodeData();
 				customMessage->debug();
 				sendMessage(*customMessage);
+				*/
 			}
 			else {
 				file.state = 0;
@@ -227,6 +213,9 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 		std::cout << "getUpdatedHandler:" << _plateToTreatList.size() << std::endl;
 		while (!this->_plateToTreatList.empty()) {//ERROR: bad while -> ne have to pop if the file is not on the server
 			std::cout << "_this->_plateToTreatList.front()._codeFile: " << this->_plateToTreatList.front()._codeFile << std::endl;
+			std::cout << "_this->_plateToTreatList.front()._state: " << ((this->_plateToTreatList.front()._state == VSP::RECORDED) ? "VSP::RECORDED" : "VSP::LIVE") << std::endl;
+
+
 			sendInfoPlate(this->_plateToTreatList.front()._codeFile, this->_plateToTreatList.front()._state);
 			this->_sendFileList.pop_front();
 		}
@@ -237,7 +226,7 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 		while (!this->_sendFileList.empty()) {
 			std::cout << "_fileAnnotationList.front()._filePath: " << this->_sendFileList.front()._filePath << std::endl;
 			std::cout << "_fileAnnotationList.front()._codeFile: " << this->_sendFileList.front()._codeFile << std::endl;
-			sendFile(this->_sendFileList.front()._filePath);
+			sendFile(this->_sendFileList.front()._filePath, this->_sendFileList.front()._codeFile);
 			this->_sendFileList.pop_front();
 		}
 
@@ -248,7 +237,7 @@ void Client::getUpdatedHandler(const boost::system::error_code &error) {
 		}
 	}
 
-	_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(5));
+	_getUpdatedTimer.expires_from_now(boost::posix_time::seconds(this->_getUpdatedInterval));
 	_getUpdatedTimer.async_wait(boost::bind(&Client::getUpdatedHandler, this, _1));
 
 }
@@ -276,7 +265,7 @@ bool Client::loginHandler(MessageLogin &message) {
 		Message *messageLogin = headerMessage(VSP::LOGIN);
 		_userInfo = new MessageLogin(*messageLogin, message._login.login, message._login.password);
 		//TODO: send recorded plate [OK] - DB
-		sendRecordedPlate();
+		sendRecordedPlate();//WARNING
 	}
 
 	message.clean();
@@ -321,7 +310,7 @@ bool Client::fileHandler(MessageFile &message) {
 
 	this->_fileBuffer += b;
 	if (message._file.indx == message._file.max_indx) {
-		std::string filePath = AppData::getInstance()._appDirectory + "/to_analyze/";
+		std::string filePath = AppData::getInstance().getFileDirectoryPath();
 		std::cout << "Writting file on path: " << filePath + message._file.code_file << std::endl;
 		bool ret = FileTools::writeStringToFile(this->_fileBuffer, filePath + message._file.code_file);
 		if (!ret) {
@@ -329,7 +318,7 @@ bool Client::fileHandler(MessageFile &message) {
 		}
 		else {
 			// ADD File information on the database for treatement
-			DB::add_file(DBDATA::File(message._file.code_file, filePath, this->_userInfo->_login.login, 0));
+			DB::add_file(DBDATA::File(message._file.code_file, filePath, message._file.code_file, this->_userInfo->_login.login));//File(message._file.code_file, filePath, this->_userInfo->_login.login, 0)
 			std::cout << "SUCCESS: " << "Writting file on path: " << filePath << message._file.code_file << std::endl;
 		}
 		this->_fileBuffer = "";
@@ -349,7 +338,7 @@ bool Client::unknowMessageHandler(Message &message) {
 
 /* Send File */
 
-void Client::sendFile(std::string filename) {//INFO: may be add code file as param
+void Client::sendFile(std::string filename, std::string codeFile) {//INFO: may be add code file as param
 	std::string buffer = FileTools::readStringFromFile(filename.c_str());
 
 	if (buffer.length() == 0)
@@ -369,7 +358,7 @@ void Client::sendFile(std::string filename) {//INFO: may be add code file as par
 		std::memcpy(dataToSend, buffer.c_str() + rangeToRead.location, rangeToRead.length);
 		Message *message = headerMessage(VSP::FILE);
 
-		MessageFile *customMessage = new MessageFile(*message, 'a', i, nbMessage, (char*)filename.c_str(), rangeToRead.length, dataToSend);
+		MessageFile *customMessage = new MessageFile(*message, 'a', i, nbMessage, (char*)codeFile.c_str(), rangeToRead.length, dataToSend);
 		customMessage->encodeBody();
 		customMessage->encodeData();
 		sendMessage(*customMessage);
@@ -417,7 +406,7 @@ tcp::socket& Client::getSocket() {
 }
 
 std::string	Client::getIpAsString() const {
-	return _socket.remote_endpoint().address().to_string();
+	return  _socket.remote_endpoint().address().to_string();
 }
 
 /* SETTER */
@@ -429,7 +418,7 @@ void Client::setDelegate(IServerDelegate *delegate) {
 /* DEBUG */
 
 void Client::displayUserInfo() const {
-	std::cout << "[" << getIpAsString() << "]";
+	std::cout << "[" << getIpAsString() << "]";//ERROR: if socket close -> throwing exeption
 	if (this->_userInfo) {
 		std::cout << " login: " << _userInfo->_login.login; /*<< " password: " << _userInfo->_login.password;*/
 	}

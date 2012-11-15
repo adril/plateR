@@ -12,9 +12,10 @@ bool	DB::add_user(DBDATA::User user)
 bool	DB::add_file(DBDATA::File file)
 {
 	std::string	query = 
-		"INSERT INTO `file` (`id` ,`name` ,`path`, `user`, `state`) VALUES (NULL , '" 
+		"INSERT INTO `file` (`id` ,`name` ,`path`, `codeFile`, `user`, `state`) VALUES (NULL , '" 
 		+ file.name + "', '"
 		+ file.path + "', '"
+		+ file.codeFile + "', '"
 		+ file.user + "', '0');";
 	FileTools::writeStringToFile(query, "query");
 	return DB::execute(query);
@@ -38,6 +39,7 @@ bool DB::update_file(DBDATA::File file)
 		"UPDATE `file` SET `name` = '" 
 		+ file.name + "', `path` = '" 
 		+ file.path + "', `user` = '" 
+		+ file.codeFile + "', `codeFile` = '" 
 		+ file.user +"', `state` = '"
 		+ std::to_string(file.state) + "' WHERE `name` = '"
 		+ file.name + "';";
@@ -53,14 +55,14 @@ std::list<DBDATA::File> DB::get_file_to_treat(std::string username)
 {
 	//name 	path 	user 	state
 	std::list<DBDATA::File> fileList;
-	std::string		query = "SELECT name, path, user, state FROM file WHERE user='";
+	std::string		query = "SELECT name, path, codeFile, user, state FROM file WHERE user='";
 	query += username + "' AND state = 0;";
 	try
 	{
 		sql::ResultSet *res = DB::executeQuery(query);
 		while (res->next())
 		{
-			fileList.push_back(DBDATA::File(res->getString("name"), res->getString("path"), res->getString("user"), res->getInt("state")));
+			fileList.push_back(DBDATA::File(res->getString("name"), res->getString("path"), res->getString("codeFile"), res->getString("user"), res->getInt("state")));
 		}
 		return fileList;
 	}

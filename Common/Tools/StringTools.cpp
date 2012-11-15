@@ -1,4 +1,6 @@
 ﻿#include "StringTools.hpp"
+#include <Windows.h>
+#include <wincrypt.h>
 #include <iostream>
 #include <fstream>
 
@@ -36,8 +38,7 @@ std::string StringTools::UrlEncode(const std::string& szToEncode)
 }
 
 
-std::string StringTools::UrlDecode(const std::string& szToDecode)
-{
+std::string StringTools::UrlDecode(const std::string& szToDecode) {
 	std::string result;
 	int hex = 0;
 	for (size_t i = 0; i < szToDecode.length(); ++i)
@@ -75,4 +76,44 @@ std::string StringTools::UrlDecode(const std::string& szToDecode)
 		}
 	}
 	return result;
+}
+
+std::string StringTools::integerToString(int value) {
+	std::stringstream result;
+
+	result << value;
+	return result.str();
+}
+
+std::string StringTools::stringToMd5(std::string value) {
+	HCRYPTPROV CryptProv; 
+	HCRYPTHASH CryptHash; 
+	BYTE BytesHash[33];//!
+	DWORD dwHashLen;
+	std::string final;
+
+	if (CryptAcquireContext(&CryptProv, 
+		NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET)) 
+	{
+		if (CryptCreateHash(CryptProv, CALG_MD5, 0, 0, &CryptHash)) 
+		{
+			if (CryptHashData(CryptHash, (BYTE*)value.c_str(), value.length(), 0))
+			{
+				if (CryptGetHashParam(CryptHash, HP_HASHVAL, BytesHash, &dwHashLen, 0)) 
+				{
+					final.clear();
+					std::string hexcharset = "0123456789ABCDEF";
+					for(int j = 0; j < 16; j++)
+					{
+						final += hexcharset.substr(((BytesHash[j] >> 4) & 0xF),1);
+						final += hexcharset.substr(((BytesHash[j]) & 0x0F),1);
+					}
+				}
+			}
+		}
+	}
+
+	CryptDestroyHash(CryptHash); 
+	CryptReleaseContext(CryptProv, 0); 
+	return final; 
 }

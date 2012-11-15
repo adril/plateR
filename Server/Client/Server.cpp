@@ -14,7 +14,7 @@ Server::Server() :
 	_timer.async_wait(boost::bind(&Server::areClientsAlive, this));
 	
 	// Init DataBase
-	std::string dbDirectory =  AppData::getInstance()._appDirectory + "dataBase.db";
+	std::string dbDirectory =  AppData::getInstance()._appDirectoryPath + "/dataBase.db";
 	try {
 		AppData::getInstance()._SQLdriver = get_driver_instance();
 		AppData::getInstance()._dataBaseConnector = AppData::getInstance()._SQLdriver->connect(HOST, USER, PASS);
@@ -22,21 +22,11 @@ Server::Server() :
 		std::cout << "Connection to the db server success..." << std::endl;
 		std::cout << "Connection to the db success..." << std::endl;
 	} 
-	catch (sql::SQLException	*e) {
+	catch (sql::SQLException *e) {
 		std::cerr << "Connection failed..." << std::endl;
 		std::cerr << e->what() << std::endl;
 	}
 	
-	// Init Config Manager
-	//AppData::getInstance()._configManager.initWithDataBase(AppData::getInstance()._dataBaseConnector);
-	//AppData::getInstance()._configManager.createDefaultParam("projetName", "ServerPlate");
-
-	/*
-	_configManager	---> initWithDataBase {
-		[this->_dataBase executeNonQuery("CREATE TABLE config (codeConfig TEXT, valeur TEXT)");
-		}
-	*/
-
 	startAccept();
 }
 
@@ -107,6 +97,8 @@ void Server::handleAccept(Client *cl, tcp::error_code error) {
 void Server::disconectClient(void *client) {
 	removeClient(reinterpret_cast<Client*>(client));
 }
+
+/* IServerDelegate */
 
 std::string Server::recognizePlate(void *client, std::string code_file) {
 	//TODO:  do stuff with member or static class

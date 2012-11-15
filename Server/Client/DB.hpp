@@ -23,10 +23,11 @@ namespace DBDATA {
 	struct File {
 		std::string name;
 		std::string path;
+		std::string codeFile;
 		std::string user;
 		int state;
-		File(std::string n, std::string p, std::string u, int s = 0)
-			: name(n), path(p), user(u), state(s) {}
+		File(std::string n, std::string p, std::string c, std::string u, int s = 0)
+			: name(n), path(p), codeFile(c), user(u), state(s) {}
 	};
 };
 

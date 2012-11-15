@@ -2,16 +2,25 @@
 #include <shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
 #include "shlobj.h"
+#include "FileTools.hpp"
 
 AppData::AppData() {
 	std::cout << "AppData::AppData(void)" << std::endl;
-	//TODO: get AppDirectory [OK]
-	TCHAR szPath[MAX_PATH];
-	if ( SUCCEEDED( SHGetFolderPath( NULL, CSIDL_MYDOCUMENTS, NULL, 0, szPath ) ) ) {
-		this->_appDirectory = szPath; //"hello world";
 
+	TCHAR path[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, 0, path))) {
+		this->_appDirectoryPath = FileTools::epurPath(path);
 	}
+	else {
+		this->_appDirectoryPath = "";
+	}
+	this->_fileDirectory = "/to_analyze/";
 
+}
+
+std::string AppData::getFileDirectoryPath() {
+	std::string result = this->_appDirectoryPath + this->_fileDirectory;
+	return result;
 }
 
 

@@ -29,6 +29,7 @@ private :
 	tcp::io_service	_io_service;
 	std::string	_fileBuffer;
 
+	size_t _getUpdatedInterval;
 	boost::asio::deadline_timer	_getUpdatedTimer;
 
 	std::list<Message *> _sendMessageList;
@@ -55,7 +56,7 @@ public:
 	void sendRecordedPlate();
 	void sendInfoPlate(std::string codeFile, char state);
 	void sendLogout();
-	void sendFile(std::string filePath);
+	void sendFile(std::string filePat, std::string codeFile);
 
 	/* HANDLER */
 	void getUpdatedHandler(const boost::system::error_code& error);

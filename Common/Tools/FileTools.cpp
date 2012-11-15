@@ -28,16 +28,37 @@ std::string FileTools::readStringFromFile(std::string filePath)
 	unsigned int size = 0;
 	char *memblock;
 
-	std::ifstream file (filePath.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
-	if (file.is_open())
-	{
+	std::ifstream file (filePath.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
+	if (file.is_open()) {
 		size = (unsigned int)file.tellg();
 		memblock = new char[size];
-		file.seekg (0, std::ios::beg);
-		file.read (memblock, size);
+		file.seekg(0, std::ios::beg);
+		file.read(memblock, size);
 		file.close();
 		std::string buffer(memblock, size);
 		return buffer;
 	}
 	return NULL;
 }
+
+bool FileTools::fileExistAtPath(std::string path) {
+	bool result = false;
+
+	return result;
+}
+
+bool FileTools::createDirectoryAtPath(std::string path) {
+	bool result = false;
+
+	return result;
+}
+
+
+std::string FileTools::epurPath(std::string path) {
+	for (unsigned int i = 0; i < path.length(); i++) {
+		if (path[i] == '\\')
+			path[i] = '/';
+	}
+	return path;
+}
+

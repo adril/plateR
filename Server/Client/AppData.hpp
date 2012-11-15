@@ -24,14 +24,11 @@
 #include <iostream>
 #include <stdint.h>
 
-//TODO: ad:
-//			- DB Class
-//			- Image Class
-
 class AppData {
 public:
 	public:
-		std::string		_appDirectory;
+		std::string		_appDirectoryPath;
+		std::string		_fileDirectory;
 		sql::Driver		*_SQLdriver;
 		sql::Connection *_dataBaseConnector;
 	  public:
@@ -39,6 +36,7 @@ public:
             static AppData    instance;
             return instance;
         }
+		std::string getFileDirectoryPath();
     private:
         AppData();
         AppData(AppData const&);

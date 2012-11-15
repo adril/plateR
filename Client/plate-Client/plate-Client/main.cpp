@@ -1,21 +1,17 @@
-#include "Client.hpp"
-#include "AppData.hpp"
+#include "ClientController.h"
 
-/*
 int main(int argc, char* argv[]) {
+	boost::asio::io_service io_service;
+
+
 	try {
-		boost::asio::io_service io_service;
-		tcp::resolver r(io_service);
-		Client c(io_service);
-
-		std::string host = AppData::getInstance()._host;
-		std::string port = AppData::getInstance()._port;
-		c.start(r.resolve(tcp::resolver::query(host, port)));
-
+		ClientController *clientController = new ClientController(io_service);
+		clientController->start();
 		io_service.run();
 	}
 	catch (std::exception& e) {
 		std::cerr << "Exception: " << e.what() << "\n";
 	}
+
 	return 0;
-}*/
+}

@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\Digital-final\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;C:\Users\JD\Documents\SqlTools\MySQL Connector C++ 1.1.1\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Debug;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Documents\SqlTools\MySQL Connector C++ 1.1.1\lib\opt;$(LibraryPath)</LibraryPath>
+    <IncludePath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\Digital-final\plateR\Common\LProtocol\include;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;C:\Users\JD\Documents\SqlTools\MySQL Connector C++ 1.1.1\include\;Z:\Desktop\dev\trainning-china\plateR\SqlTools\MySQL Connector C++ 1.1.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Z:\Desktop\dev\trainning-china\plateR\Common\LProtocol\Windows\Debug;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0\stage\lib;C:\Users\JD\Documents\SqlTools\MySQL Connector C++ 1.1.1\lib\opt;Z:\Desktop\dev\trainning-china\plateR\SqlTools\MySQL Connector C++ 1.1.1\lib\opt;$(LibraryPath)</LibraryPath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalOptions>-D_WIN32_WINNT=0x0501 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-final\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-Final\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\CommonFile\LProtocol\include;Z:\Desktop\dev\trainning-china\boost_1_52_0\boost_1_52_0;C:\Users\JD\Desktop\boost_1_52_0\boost_1_52_0;Z:\Desktop\dev\trainning-china\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-final\plateR\Common\Tools;C:\Users\JD\Desktop\Digital-Final\plateR\Common\Annotation;Z:\Desktop\dev\trainning-china\plateR\Common\Annotation;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_WIN32_WINNT=0x0501</PreprocessorDefinitions>
     </ClCompile>
     <Link>

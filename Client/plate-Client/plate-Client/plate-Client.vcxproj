@@ -71,9 +71,11 @@
     <ClCompile Include="..\..\..\Common\Annotation\FileAnnotation.cpp" />
     <ClCompile Include="..\..\..\Common\Annotation\PlateAnnotation.cpp" />
     <ClCompile Include="..\..\..\Common\Tools\FileTools.cpp" />
+    <ClCompile Include="..\..\..\Common\Tools\StringTools.cpp" />
     <ClCompile Include="..\..\..\Common\Tools\Tools.cpp" />
     <ClCompile Include="AppData.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientController.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -86,9 +88,11 @@
     <ClInclude Include="..\..\..\Common\Annotation\FileAnnotation.h" />
     <ClInclude Include="..\..\..\Common\Annotation\PlateAnnotation.h" />
     <ClInclude Include="..\..\..\Common\Tools\FileTools.hpp" />
+    <ClInclude Include="..\..\..\Common\Tools\StringTools.hpp" />
     <ClInclude Include="..\..\..\Common\Tools\Tools.hpp" />
     <ClInclude Include="AppData.hpp" />
     <ClInclude Include="Client.hpp" />
+    <ClInclude Include="ClientController.h" />
     <ClInclude Include="IClientDelegate.hh" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
